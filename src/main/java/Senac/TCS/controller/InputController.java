@@ -19,46 +19,26 @@ public class InputController {
 
     @GetMapping
     public ResponseEntity<List<Input>> obterTodosInputs() {
-        List<Input> inputs = inputService.listarTodosInputs();
-        return new ResponseEntity<>(inputs, HttpStatus.OK);
+        return new ResponseEntity<>(inputService.listarTodosInputs(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Input> obterInputPorId(@PathVariable Long id) {
-        Optional<Input> input = inputService.obterInputPorId(id);
-        if (input.isPresent()) {
-            return new ResponseEntity<>(input.get(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>( inputService.obterInputPorId(id).get(), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<Input> criarInput(@RequestBody Input input) {
-        Input savedInput = inputService.criarInput(input);
-        return new ResponseEntity<>(savedInput, HttpStatus.CREATED);
+        return new ResponseEntity<>(inputService.criarInput(input), HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Input> atualizarInput(@PathVariable Long id, @RequestBody Input input) {
-        Optional<Input> existingInput = inputService.obterInputPorId(id);
-        if (existingInput.isPresent()) {
-            input.setId(id);
-            Input updatedInput = inputService.atualizarInput(input);
-            return new ResponseEntity<>(updatedInput, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    @PutMapping
+    public ResponseEntity<Input> atualizarInput(@RequestBody Input input) {
+        return new ResponseEntity<>(inputService.atualizarInput(input), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarInput(@PathVariable Long id) {
-        Optional<Input> input = inputService.obterInputPorId(id);
-        if (input.isPresent()) {
-            inputService.deletarInput(id);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

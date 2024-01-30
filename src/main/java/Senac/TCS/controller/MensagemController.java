@@ -3,6 +3,8 @@ package Senac.TCS.controller;
 import Senac.TCS.model.entity.Mensagem;
 import Senac.TCS.service.MensagemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,28 +17,28 @@ public class MensagemController {
     private MensagemService mensagemService;
 
     @GetMapping
-    public List<Mensagem> listarMensagens() {
-        return mensagemService.listarTodasMensagens();
+    public ResponseEntity<List<Mensagem>> ObterTodasMensagens() {
+        return new ResponseEntity<>(mensagemService.listarTodasMensagens(), HttpStatus.FOUND);
     }
 
     @GetMapping("/{id}")
-    public Mensagem obterMensagemPorId(@PathVariable Long id) {
-        return mensagemService.obterMensagemPorId(id);
+    public ResponseEntity<Mensagem> obterMensagemPorId(@PathVariable Long id) {
+        return new ResponseEntity<>(mensagemService.obterMensagemPorId(id), HttpStatus.FOUND);
     }
 
     @PostMapping
-    public Mensagem criarMensagem(@RequestBody Mensagem mensagem) {
-        return mensagemService.criarMensagem(mensagem);
+    public ResponseEntity<Mensagem> criarMensagem(@RequestBody Mensagem mensagem) {
+        return new ResponseEntity<>(mensagemService.criarMensagem(mensagem), HttpStatus.CREATED);
     }
 
     @PutMapping
-    public Mensagem atualizarMensagem(@RequestBody Mensagem mensagem) {
-        return mensagemService.atualizarMensagem(mensagem);
+    public ResponseEntity<Mensagem> atualizarMensagem(@RequestBody Mensagem mensagem) {
+        return new ResponseEntity<>(mensagemService.atualizarMensagem(mensagem), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public void deletarMensagem(@PathVariable Long id) {
-        mensagemService.deletarMensagem(id);
+    public ResponseEntity<Void> deletarMensagem(@PathVariable Long id) {
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
 
