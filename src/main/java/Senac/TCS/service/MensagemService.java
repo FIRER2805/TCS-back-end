@@ -22,8 +22,8 @@ public class MensagemService {
         return mensagemRepository.findById(id).orElse(null);
     }
 
-    public Optional<Mensagem> obterMensagemRoot(Long idSetor){
-        return mensagemRepository.obterMensagemRoot(idSetor);
+    public Mensagem obterMensagemRoot(Long idSetor){
+        return mensagemRepository.obterMensagemRoot(idSetor).orElse(null);
     }
 
     public Mensagem criarMensagem(Mensagem mensagem) {

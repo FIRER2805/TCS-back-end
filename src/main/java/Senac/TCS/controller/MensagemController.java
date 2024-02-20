@@ -26,6 +26,11 @@ public class MensagemController {
         return new ResponseEntity<>(mensagemService.obterMensagemPorId(id), HttpStatus.FOUND);
     }
 
+    @GetMapping("/root/{idSetor}")
+    public ResponseEntity<Mensagem> obterMensagemRoot(@PathVariable Long idSetor) {
+        return new ResponseEntity<>(mensagemService.obterMensagemRoot(idSetor), HttpStatus.FOUND);
+    }
+
     @PostMapping
     public ResponseEntity<Mensagem> criarMensagem(@RequestBody Mensagem mensagem) {
         return new ResponseEntity<>(mensagemService.criarMensagem(mensagem), HttpStatus.CREATED);
