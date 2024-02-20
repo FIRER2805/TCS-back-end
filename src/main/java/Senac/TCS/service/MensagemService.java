@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MensagemService {
@@ -19,6 +20,10 @@ public class MensagemService {
 
     public Mensagem obterMensagemPorId(Long id) {
         return mensagemRepository.findById(id).orElse(null);
+    }
+
+    public Optional<Mensagem> obterMensagemRoot(Long idSetor){
+        return mensagemRepository.obterMensagemRoot(idSetor);
     }
 
     public Mensagem criarMensagem(Mensagem mensagem) {

@@ -1,5 +1,6 @@
 package Senac.TCS.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,9 +16,7 @@ public class Mensagem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String conteudo;
-    @OneToMany(mappedBy = "mensagemAnterior")
-    private List<Input> inputsAnteriores;
 
-    @OneToMany(mappedBy = "mensagemSucessora")
+    @OneToMany(mappedBy="mensagensFilha")
     private List<Input> inputsSucessores;
 }
