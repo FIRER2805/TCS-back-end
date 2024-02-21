@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Getter
@@ -16,7 +17,14 @@ public class Mensagem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String conteudo;
+    @Column(name = "input_pai")
+    private String inputPai;
 
-    @OneToMany(mappedBy="mensagensFilha")
-    private List<Input> inputsSucessores;
+    @OneToMany(mappedBy = "mensagemPai")
+    private List<Mensagem> mensagensFilhas;
+
+    @ManyToOne
+    @JoinColumn(name = "id_mensagem_pai")
+    @JsonBackReference
+    private Mensagem mensagemPai;
 }
