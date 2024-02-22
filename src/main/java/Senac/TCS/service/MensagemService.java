@@ -19,12 +19,12 @@ public class MensagemService {
     }
 
     public Mensagem obterMensagemPorId(Long id) {
-        return mensagemRepository.findById(id).orElse(null);
+    	return mensagemRepository.findById(id).orElse(null);
     }
-
+/*
     public Mensagem obterMensagemRoot(Long idSetor){
         return mensagemRepository.obterMensagemRoot(idSetor).orElse(null);
-    }
+    }*/
 
     public Mensagem criarMensagem(Mensagem mensagem) {
         return mensagemRepository.save(mensagem);

@@ -1,5 +1,6 @@
 package Senac.TCS.controller;
 
+import Senac.TCS.model.dto.mensagemDTO;
 import Senac.TCS.model.entity.Mensagem;
 import Senac.TCS.service.MensagemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +26,11 @@ public class MensagemController {
     public ResponseEntity<Mensagem> obterMensagemPorId(@PathVariable Long id) {
         return new ResponseEntity<>(mensagemService.obterMensagemPorId(id), HttpStatus.FOUND);
     }
-
+/*
     @GetMapping("/root/{idSetor}")
     public ResponseEntity<Mensagem> obterMensagemRoot(@PathVariable Long idSetor) {
         return new ResponseEntity<>(mensagemService.obterMensagemRoot(idSetor), HttpStatus.FOUND);
-    }
+    }*/
 
     @PostMapping
     public ResponseEntity<Mensagem> criarMensagem(@RequestBody Mensagem mensagem) {

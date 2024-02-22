@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MensagemRepository extends CrudRepository<Mensagem,Long> {
-
+/*
     @Query(value="select m.* from mensagem m \n" +
             "join setor s on \n" +
             "s.id = m.id_setor \n" +
@@ -18,5 +18,6 @@ public interface MensagemRepository extends CrudRepository<Mensagem,Long> {
             "AND not exists(select 1 from mensagem_input mi  where mi.id_mensagem_filha = m.id);",
     nativeQuery = true)
     Optional<Mensagem> obterMensagemRoot(@Param("idSetor") Long idSetor);
-
+*/
+	Mensagem findById(long id);
 }
