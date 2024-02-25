@@ -19,5 +19,4 @@ public interface MensagemRepository extends CrudRepository<Mensagem,Long> {
     nativeQuery = true)
     Optional<Mensagem> obterMensagemRoot(@Param("idSetor") Long idSetor);
 */
-	Mensagem findById(long id);
 }

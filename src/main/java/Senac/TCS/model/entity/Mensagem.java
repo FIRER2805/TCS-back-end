@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+@Getter
+@Setter
 @Entity
 public class Mensagem {
 	
@@ -45,41 +47,4 @@ public class Mensagem {
     @JoinColumn(name = "id_mensagem_pai")
     @JsonBackReference
     private Mensagem mensagemPai;
-
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
-	public String getConteudo() {
-		return conteudo;
-	}
-	public void setConteudo(String conteudo) {
-		this.conteudo = conteudo;
-	}
-	public Long getId_setor() {
-		return idSetor;
-	}
-	public void setId_setor(Long id_setor) {
-		this.idSetor = id_setor;
-	}
-	public String getInputPai() {
-		return inputPai;
-	}
-	public void setInputPai(String inputPai) {
-		this.inputPai = inputPai;
-	}
-	public List<Mensagem> getMensagensFilhas() {
-		return mensagensFilhas;
-	}
-	public void setMensagensFilhas(List<Mensagem> mensagensFilhas) {
-		this.mensagensFilhas = mensagensFilhas;
-	}
-	public Mensagem getMensagemPai() {
-		return mensagemPai;
-	}
-	public void setMensagemPai(Mensagem mensagemPai) {
-		this.mensagemPai = mensagemPai;
-	}
 }

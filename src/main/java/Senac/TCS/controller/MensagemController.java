@@ -44,6 +44,7 @@ public class MensagemController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarMensagem(@PathVariable Long id) {
+        mensagemService.deletarMensagem(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

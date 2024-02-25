@@ -17,6 +17,5 @@ public class Setor {
     private String nome;
 
     private String descricao;
-
 }
 
