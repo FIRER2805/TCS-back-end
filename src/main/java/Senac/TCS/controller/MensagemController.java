@@ -1,5 +1,6 @@
 package Senac.TCS.controller;
 
+import Senac.TCS.exception.MensagemInvalidaException;
 import Senac.TCS.model.dto.mensagemDTO;
 import Senac.TCS.model.entity.Mensagem;
 import Senac.TCS.service.MensagemService;
@@ -26,15 +27,16 @@ public class MensagemController {
     public ResponseEntity<Mensagem> obterMensagemPorId(@PathVariable Long id) {
         return new ResponseEntity<>(mensagemService.obterMensagemPorId(id), HttpStatus.FOUND);
     }
-/*
-    @GetMapping("/root/{idSetor}")
-    public ResponseEntity<Mensagem> obterMensagemRoot(@PathVariable Long idSetor) {
-        return new ResponseEntity<>(mensagemService.obterMensagemRoot(idSetor), HttpStatus.FOUND);
-    }*/
 
     @PostMapping
     public ResponseEntity<Mensagem> criarMensagem(@RequestBody Mensagem mensagem) {
-        return new ResponseEntity<>(mensagemService.criarMensagem(mensagem), HttpStatus.CREATED);
+    	try{
+    		Mensagem mensagemSalva = mensagemService.criarMensagem(mensagem);
+    		return new ResponseEntity<>(mensagemSalva, HttpStatus.OK);
+    	}
+    	catch(MensagemInvalidaException e) {
+    		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    	}
     }
 
     @PutMapping
