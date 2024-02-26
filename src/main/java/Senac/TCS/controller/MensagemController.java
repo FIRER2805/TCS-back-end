@@ -13,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/mensagem")
+@CrossOrigin(origins = {"http://localhost:4200","http://localhost:9000"}, maxAge = 3600)
 public class MensagemController {
 
     @Autowired
@@ -39,9 +40,15 @@ public class MensagemController {
     	}
     }
 
-    @PutMapping
-    public ResponseEntity<Mensagem> atualizarMensagem(@RequestBody Mensagem mensagem) {
-        return new ResponseEntity<>(mensagemService.atualizarMensagem(mensagem), HttpStatus.OK);
+    @PutMapping("/{id}")
+    public ResponseEntity<Mensagem> atualizarMensagem(@PathVariable Long id, @RequestBody Mensagem mensagem) {
+        try{
+            Mensagem mensagemSalva = mensagemService.atualizarMensagem(id,mensagem);
+            return new ResponseEntity<>(mensagemSalva, HttpStatus.OK);
+        }
+        catch(MensagemInvalidaException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping("/{id}")

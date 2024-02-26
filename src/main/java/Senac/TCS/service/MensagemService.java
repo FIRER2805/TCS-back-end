@@ -31,8 +31,13 @@ public class MensagemService {
         return mensagemRepository.save(mensagem);
     }
 
-    public Mensagem atualizarMensagem(Mensagem mensagem) {
-        return mensagemRepository.save(mensagem);
+    public Mensagem atualizarMensagem(Long id, Mensagem mensagem) throws MensagemInvalidaException {
+		String erro = this.validarMensagem(id,mensagem);
+		if(!erro.isEmpty()){
+			throw new MensagemInvalidaException(erro);
+		}
+		mensagem.setId(id);
+		return mensagemRepository.save(mensagem);
     }
 
     public void deletarMensagem(Long id) {
@@ -50,15 +55,24 @@ public class MensagemService {
     		}
     		// verifica caso for mensagem root, não pode ter um input pai
     		if((mensagem.getMensagemPai() == null || mensagem.getMensagemPai().getId() == null) &&
-    				(mensagem.getInputPai() == null || mensagem.getInputPai().isBlank())) {
+    				!(mensagem.getInputPai() == null || mensagem.getInputPai().isBlank())) {
     			erro += "Mensagem root não pode ter inputPai \n";
     		}
     		// verifica se for mensagem filha, ela precisa ter inputPai
     		if(!(mensagem.getMensagemPai() == null || mensagem.getMensagemPai().getId() == null) &&
-    				!(mensagem.getInputPai() == null || mensagem.getInputPai().isBlank())) {
+    				(mensagem.getInputPai() == null || mensagem.getInputPai().isBlank())) {
     			erro += "Mensagem filha precisa ter inputPai \n";
     		}
     	}
     	return erro;
     }
+
+	private String validarMensagem(Long id, Mensagem mensagem){
+		String erro = "";
+		if(id == null){
+			erro += "É necessario colocar id para atualizar a mensagem \n";
+		}
+		erro += this.validarMensagem(mensagem);
+		return erro;
+	}
 }
