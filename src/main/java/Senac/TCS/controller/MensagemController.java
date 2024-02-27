@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/mensagem")
+@RequestMapping("/HistoricoMensagem")
 @CrossOrigin(origins = {"http://localhost:4200","http://localhost:9000"}, maxAge = 3600)
 public class MensagemController {
 
