@@ -1,10 +1,10 @@
 package Senac.TCS.model.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 
 import Senac.TCS.model.entity.Contato;
 
-public interface ContatoRepository extends JpaRepository<Contato, Long>{
+public interface ContatoRepository extends CrudRepository<Contato, Long>{
 
 	
 
