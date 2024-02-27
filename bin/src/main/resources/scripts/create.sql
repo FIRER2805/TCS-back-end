@@ -35,16 +35,21 @@ create table contato(
 CREATE TABLE mensagem (
     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     conteudo VARCHAR(255) NOT NULL,
-    input_pai varchar(255),
-    id_mensagem_pai BIGINT,
-    FOREIGN KEY (id_mensagem_pai) references mensagem(id),
     id_setor BIGINT null,
     FOREIGN KEY (id_setor) references setor(id)
 );
 
-CREATE TABLE mensagem_contato(
+CREATE TABLE `input`(
 	id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	conteudo VARCHAR(255) NOT NULL,
-	id_contato BIGINT NOT NULL,
-	FOREIGN KEY (id_contato) references contato(id)
-);
+)
+
+CREATE TABLE mensagem_input(
+	id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	id_mensagem_pai BIGINT null,
+	id_mensagem_filha BIGINT null,
+	id_input BIGINT null,
+	FOREIGN KEY (id_mensagem_pai) references mensagem(id),
+	FOREIGN KEY (id_mensagem_filha) references mensagem(id),
+	FOREIGN KEY (id_input) references input(id)
+)
