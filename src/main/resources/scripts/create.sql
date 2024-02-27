@@ -42,7 +42,7 @@ CREATE TABLE mensagem (
     FOREIGN KEY (id_setor) references setor(id)
 );
 
-CREATE TABLE mensagem_contato(
+CREATE TABLE mensagem_historico(
 	id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	conteudo VARCHAR(255) NOT NULL,
 	id_contato BIGINT NOT NULL,
