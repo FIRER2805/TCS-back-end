@@ -2,6 +2,7 @@ package Senac.TCS.controller;
 
 import java.util.List;
 
+import Senac.TCS.model.dto.MensagemHistoricoDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ import Senac.TCS.service.MensagemHistoricoService;
 import Senac.TCS.service.MensagemService;
 
 @RestController
-@RequestMapping("/mensagem")
+@RequestMapping("/historico-mensagem")
 @CrossOrigin(origins = {"http://localhost:4200","http://localhost:9000"}, maxAge = 3600)
 public class MensagemHistoricoController {
 	
@@ -34,15 +35,10 @@ public class MensagemHistoricoController {
         return new ResponseEntity<>(mensagemHistoricoService.buscarHistoricoPorIdConteudo(idContato), HttpStatus.FOUND);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<MensagemHistorico> obterMensagemPorId(@PathVariable Long id) {
-        return new ResponseEntity<>(mensagemHistoricoService.obterMensagemPorId(id), HttpStatus.FOUND);
-    }
-
     @PostMapping
-    public ResponseEntity<MensagemHistorico> inserirMensagem(@RequestBody MensagemHistorico mensagemHistorico) {
+    public ResponseEntity<MensagemHistorico> inserirMensagem(@RequestBody MensagemHistoricoDto mensagemHistoricoDto) {
     	try{
-    		MensagemHistorico mensagemSalva = mensagemHistoricoService.criarMensagem(mensagemHistorico);
+    		MensagemHistorico mensagemSalva = mensagemHistoricoService.criarMensagem(mensagemHistoricoDto);
     		return new ResponseEntity<>(mensagemSalva, HttpStatus.OK);
     	}
     	catch(MensagemInvalidaException e) {

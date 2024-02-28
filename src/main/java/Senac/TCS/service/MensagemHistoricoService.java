@@ -2,6 +2,8 @@ package Senac.TCS.service;
 
 import java.util.List;
 
+import Senac.TCS.model.dto.MensagemHistoricoDto;
+import Senac.TCS.model.entity.Contato;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,10 +13,12 @@ import Senac.TCS.model.repository.MensagemHistoricoRepository;
 
 @Service
 public class MensagemHistoricoService {
-	
+
 	@Autowired
 	private MensagemHistoricoRepository mensagemHistoricoRepository;
-	
+	@Autowired
+	private ContatoService contatoService;
+
     public List<MensagemHistorico> listarTodasMensagens() {
         return (List<MensagemHistorico>) mensagemHistoricoRepository.findAll();
     }
@@ -27,11 +31,24 @@ public class MensagemHistoricoService {
     	return mensagemHistoricoRepository.findById(id).orElse(null);
     }
 
-    public MensagemHistorico criarMensagem(MensagemHistorico mensagemHistorico) throws MensagemInvalidaException {
+    public MensagemHistorico criarMensagem(MensagemHistoricoDto mensagemHistoricoDto) throws MensagemInvalidaException {
+		MensagemHistorico mensagemHistorico = new MensagemHistorico();
+		mensagemHistorico.setConteudo(mensagemHistoricoDto.getConteudo());
+
     	String erro = this.validarMensagem(mensagemHistorico);
     	if(!erro.isEmpty()) {
     		throw new MensagemInvalidaException(erro);
     	}
+
+		Contato contato = contatoService.obterContatoPorNumero(mensagemHistoricoDto.getNumeroContato());
+
+		if(contato == null){
+			contato = new Contato();
+			contato.setNumero(mensagemHistoricoDto.getNumeroContato());
+			contato = contatoService.criarContato(contato);
+		}
+
+        mensagemHistorico.setIdContato(contato.getId());
         return mensagemHistoricoRepository.save(mensagemHistorico);
     }
 
