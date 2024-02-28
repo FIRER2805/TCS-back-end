@@ -6,6 +6,6 @@ import Senac.TCS.model.entity.Contato;
 
 public interface ContatoRepository extends CrudRepository<Contato, Long>{
 
-	
+    public Contato findByNumero(String numero);
 
 }

@@ -19,6 +19,10 @@ public class ContatoService {
 		return contatoRepository.save(contato);
 	}
 
+	public Contato obterContatoPorNumero(String numero){
+		return contatoRepository.findByNumero(numero);
+	}
+
 	public Optional<Contato> buscarContatosPorUsuario(Long idUsuario) {
 		return contatoRepository.findById(idUsuario);
 	}
