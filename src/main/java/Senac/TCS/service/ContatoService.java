@@ -9,39 +9,44 @@ import org.springframework.stereotype.Service;
 import Senac.TCS.model.entity.Contato;
 import Senac.TCS.model.repository.ContatoRepository;
 
-	@Service
-	public class ContatoService {
+@Service
+public class ContatoService {
 
-	    @Autowired
-	    private ContatoRepository contatoRepository;
+	@Autowired
+	private ContatoRepository contatoRepository;
 
-	    public Contato criarContato(Contato contato) {
-	        return contatoRepository.save(contato);
-	    }
-
-	    public Optional<Contato> buscarContatosPorUsuario(Long idUsuario) {
-	        return contatoRepository.findById(idUsuario);
-	    }
-	    
-	    public Optional<Contato> buscarContatoPorId(Long id) {
-	        return contatoRepository.findById(id);
-	    }
-
-	    public Contato atualizarContato(Long id, Contato novoContato) {
-	        if (contatoRepository.existsById(id)) {
-	            novoContato.setId(id);
-	            return contatoRepository.save(novoContato);
-	        }
-	        return null; 	    }
-
-	    public void deletarContato(Long id) {
-	        contatoRepository.deleteById(id);
-	 
-	    }
-	    public List <Contato> listarContatos() {
-			return contatoRepository.findAll();
-		}
-	    
+	public Contato criarContato(Contato contato) {
+		String master = contato.getNumero();
+		String target = "@c.us";
+		String replacement = "";
+		contato.setNumero(master.replace(target, replacement));
+		return contatoRepository.save(contato);
 	}
 
+	public Optional<Contato> buscarContatosPorUsuario(Long idUsuario) {
+		return contatoRepository.findById(idUsuario);
+	}
 
+	public Optional<Contato> buscarContatoPorId(Long id) {
+		return contatoRepository.findById(id);
+	}
+
+	public Contato atualizarContato(Long id, Contato novoContato) {
+		if (contatoRepository.existsById(id)) {
+			novoContato.setId(id);
+			return contatoRepository.save(novoContato);
+		}
+		// Criar excepition para não voltar nulo
+		return null;
+	}
+
+	public void deletarContato(Long id) {
+		contatoRepository.deleteById(id);
+
+	}
+
+	public List<Contato> listarContatos() {
+		return contatoRepository.findAll();
+	}
+
+}

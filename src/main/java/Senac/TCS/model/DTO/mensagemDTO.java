@@ -1,4 +1,4 @@
-package Senac.TCS.model.dto;
+package Senac.TCS.model.DTO;
 
 import Senac.TCS.model.entity.Mensagem;
 
