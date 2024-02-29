@@ -28,7 +28,7 @@ create table contato(
 	id BIGINT not null auto_increment primary key
 	,id_usuario BIGINT
 	,nome varchar(255)
-	,numero char(11) unique
+	,numero char(15) unique
 	,foreign key (id_usuario) references usuario(id)
 );
 
