@@ -1,7 +1,16 @@
 package entities;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "setor")
 public class Setor {
-	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String nome;
 	private String descricao;
@@ -9,7 +18,7 @@ public class Setor {
 	
 	
 	public Setor() {
-		
+		super();
 	}
 	public Setor(Integer idSetor, String nome, String descricao, int usuarios) {
 		super();

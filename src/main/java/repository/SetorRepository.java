@@ -1,7 +1,12 @@
 package repository;
 
-public class SetorRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.stereotype.Repository;
 
-	//public interface SetorRepository extends CrudRepository<Setor,Long> {
+import entities.Setor;
+
+@Repository
+public interface SetorRepository extends JpaRepository<Setor, Long>, JpaSpecificationExecutor<Setor> {
 
 }
