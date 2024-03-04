@@ -3,6 +3,7 @@ package Senac.TCS.controller;
 import Senac.TCS.exception.MensagemInvalidaException;
 import Senac.TCS.model.dto.mensagemDTO;
 import Senac.TCS.model.entity.Mensagem;
+import Senac.TCS.model.seletor.MensagemSeletor;
 import Senac.TCS.service.MensagemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,9 +11,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/HistoricoMensagem")
+@RequestMapping("/mensagem")
 @CrossOrigin(origins = {"http://localhost:4200","http://localhost:9000"}, maxAge = 3600)
 public class MensagemController {
 
@@ -38,6 +40,11 @@ public class MensagemController {
     	catch(MensagemInvalidaException e) {
     		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     	}
+    }
+    
+    @PostMapping("/proximo")
+    public ResponseEntity<Mensagem> obterProximaMensagem(MensagemSeletor seletor){
+    	return new ResponseEntity<Mensagem>(mensagemService.obterProximaMensagem(seletor), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")

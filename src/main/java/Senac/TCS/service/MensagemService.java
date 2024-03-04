@@ -1,13 +1,16 @@
 package Senac.TCS.service;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+
 import Senac.TCS.exception.MensagemInvalidaException;
 import Senac.TCS.model.entity.Mensagem;
 import Senac.TCS.model.repository.MensagemRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
+import Senac.TCS.model.seletor.MensagemSeletor;
+import Senac.TCS.model.specification.MensagemSpecification;
 
 @Service
 public class MensagemService {
@@ -21,6 +24,11 @@ public class MensagemService {
 
     public Mensagem obterMensagemPorId(Long id) {
     	return mensagemRepository.findById(id).orElse(null);
+    }
+    
+    public Mensagem obterProximaMensagem(MensagemSeletor seletor) {
+    	Specification<Mensagem> query = MensagemSpecification.proximaMensagem(seletor);
+    	return mensagemRepository.findOne(query).get();
     }
 
     public Mensagem criarMensagem(Mensagem mensagem) throws MensagemInvalidaException {

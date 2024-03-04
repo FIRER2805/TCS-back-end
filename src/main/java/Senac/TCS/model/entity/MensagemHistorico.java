@@ -26,4 +26,28 @@ public class MensagemHistorico {
 
     @Column(name = "id_contato", nullable = false)
     private Long idContato;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getConteudo() {
+		return conteudo;
+	}
+
+	public void setConteudo(String conteudo) {
+		this.conteudo = conteudo;
+	}
+
+	public Long getIdContato() {
+		return idContato;
+	}
+
+	public void setIdContato(Long idContato) {
+		this.idContato = idContato;
+	}
 }
