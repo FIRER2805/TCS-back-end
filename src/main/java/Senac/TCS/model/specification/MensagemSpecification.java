@@ -14,10 +14,18 @@ public class MensagemSpecification {
 		return (root, query, cb) -> {
 			ArrayList<Predicate> predicates = new ArrayList();
 
-			predicates.add(cb.equal(root.get("idMensagemPai"), seletor.getIdMensagemPai()));
 			predicates.add(cb.equal(root.get("idSetor"), seletor.getIdSetor()));
-			predicates.add(cb.like(root.get("inputPai"), seletor.getInputPai()));
-			
+
+			if(seletor.getIdMensagemPai() == null && seletor.getInputPai() == null){
+				predicates.add(cb.isNull(root.get("idMensagemPai")));
+				predicates.add(cb.isNull(root.get("inputPai")));
+			}
+			else {
+				predicates.add(cb.equal(root.get("idMensagemPai"), seletor.getIdMensagemPai()));
+				predicates.add(cb.like(root.get("inputPai"), seletor.getInputPai()));
+			}
+
+
 			return cb.and(predicates.toArray(new Predicate[0]));
 		};
 	}
