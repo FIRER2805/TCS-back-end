@@ -1,8 +1,6 @@
 package Senac.TCS.model.dto;
 
-import Senac.TCS.model.entity.Mensagem;
-
-public class mensagemDTO {
+public class MensagemDTO {
 	
 	private Long id;
 	private String conteudo;

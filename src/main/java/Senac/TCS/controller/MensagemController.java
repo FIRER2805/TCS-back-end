@@ -1,7 +1,7 @@
 package Senac.TCS.controller;
 
 import Senac.TCS.exception.MensagemInvalidaException;
-import Senac.TCS.model.dto.mensagemDTO;
+import Senac.TCS.model.dto.MensagemDTO;
 import Senac.TCS.model.entity.Mensagem;
 import Senac.TCS.model.seletor.MensagemSeletor;
 import Senac.TCS.service.MensagemService;
@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/mensagem")
@@ -41,11 +40,12 @@ public class MensagemController {
     		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     	}
     }
-    
+
     @PostMapping("/proximo")
-    public ResponseEntity<Mensagem> obterProximaMensagem(MensagemSeletor seletor){
-    	return new ResponseEntity<Mensagem>(mensagemService.obterProximaMensagem(seletor), HttpStatus.OK);
+    public ResponseEntity<Mensagem> obterProximaMensagem(@RequestBody MensagemSeletor seletor){
+        return new ResponseEntity<Mensagem>(mensagemService.obterProximaMensagem(seletor), HttpStatus.OK);
     }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<Mensagem> atualizarMensagem(@PathVariable Long id, @RequestBody Mensagem mensagem) {

@@ -7,6 +7,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import Senac.TCS.exception.MensagemInvalidaException;
+import Senac.TCS.model.dto.MensagemDTO;
 import Senac.TCS.model.entity.Mensagem;
 import Senac.TCS.model.repository.MensagemRepository;
 import Senac.TCS.model.seletor.MensagemSeletor;
@@ -62,12 +63,12 @@ public class MensagemService {
     			erro += "Não há conteudo na mensagem \n";
     		}
     		// verifica caso for mensagem root, não pode ter um input pai
-    		if((mensagem.getMensagemPai() == null || mensagem.getMensagemPai().getId() == null) &&
+    		if((mensagem.getIdMensagemPai() == null) &&
     				!(mensagem.getInputPai() == null || mensagem.getInputPai().isBlank())) {
     			erro += "Mensagem root não pode ter inputPai \n";
     		}
     		// verifica se for mensagem filha, ela precisa ter inputPai
-    		if(!(mensagem.getMensagemPai() == null || mensagem.getMensagemPai().getId() == null) &&
+    		if((mensagem.getIdMensagemPai() != null) &&
     				(mensagem.getInputPai() == null || mensagem.getInputPai().isBlank())) {
     			erro += "Mensagem filha precisa ter inputPai \n";
     		}

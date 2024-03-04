@@ -13,8 +13,8 @@ public class MensagemSpecification {
 	public static Specification<Mensagem> proximaMensagem(MensagemSeletor seletor){
 		return (root, query, cb) -> {
 			ArrayList<Predicate> predicates = new ArrayList();
-			
-			predicates.add(cb.equal(root.get("mensagemPai"), seletor.getIdMensagemPai()));
+
+			predicates.add(cb.equal(root.get("idMensagemPai"), seletor.getIdMensagemPai()));
 			predicates.add(cb.equal(root.get("idSetor"), seletor.getIdSetor()));
 			predicates.add(cb.like(root.get("inputPai"), seletor.getInputPai()));
 			
