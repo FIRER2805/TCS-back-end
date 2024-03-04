@@ -1,6 +1,7 @@
 package Senac.TCS.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
@@ -29,7 +30,7 @@ public class MensagemService {
     
     public Mensagem obterProximaMensagem(MensagemSeletor seletor) {
     	Specification<Mensagem> query = MensagemSpecification.proximaMensagem(seletor);
-    	return mensagemRepository.findOne(query).get();
+    	return mensagemRepository.findOne(query).orElse(null);
     }
 
     public Mensagem criarMensagem(Mensagem mensagem) throws MensagemInvalidaException {
