@@ -43,7 +43,7 @@ public class UsuarioController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public void excluirProduto(@PathVariable Long id) {
+	public void excluirPorId(@PathVariable Long id) {
 		service.excluirPorId(id);
 	}
 	
