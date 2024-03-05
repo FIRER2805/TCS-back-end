@@ -1,5 +1,7 @@
 package entities;
 
+import java.util.ArrayList;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,13 +16,13 @@ public class Setor {
 	private Integer id;
 	private String nome;
 	private String descricao;
-	private int usuarios;
+	private ArrayList<Integer> usuarios;
 	
 	
 	public Setor() {
 		super();
 	}
-	public Setor(Integer idSetor, String nome, String descricao, int usuarios) {
+	public Setor(Integer idSetor, String nome, String descricao, ArrayList<Integer> usuarios) {
 		super();
 		this.id = idSetor;
 		this.nome = nome;
@@ -46,10 +48,10 @@ public class Setor {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
-	public int getUsuarios() {
-		return usuarios;
+	public ArrayList<Integer> getUsuarios() {
+		return this.usuarios;
 	}
-	public void setUsuarios(int usuarios) {
+	public void setUsuarios(ArrayList<Integer> usuarios) {
 		this.usuarios = usuarios;
 	}
 
