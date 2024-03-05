@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import Senac.TCS.exception.CampoInvalidoException;
 import Senac.TCS.model.entity.Usuario;
 import Senac.TCS.service.UsuarioService;
 
@@ -45,6 +46,19 @@ public class UsuarioController {
 	@DeleteMapping("/{id}")
 	public void excluirPorId(@PathVariable Long id) {
 		service.excluirPorId(id);
+	}
+	
+	
+	
+	public Usuario efetuarLogin(Usuario usuario) {
+		try {
+			Usuario user = service.efetuarLogin(usuario);
+			usuario = user;
+			
+		} catch (CampoInvalidoException e) {
+			e.printStackTrace();
+		}
+		return usuario;
 	}
 	
 	

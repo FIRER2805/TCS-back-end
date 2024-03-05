@@ -37,6 +37,30 @@ public class UsuarioService {
 		usuarioRepository.deleteById(id);
 	}
 	
+	public Usuario efetuarLogin(Usuario usuario) throws CampoInvalidoException {
+		
+		String mensagemErro = ""; 
+		Usuario user = null;
+		
+		if(usuarioRepository.existsByEmail(usuario.getEmail())) {
+			mensagemErro += "";
+		}
+		
+		if(usuarioRepository.existsBySenha(usuario.getEmail())) {
+			mensagemErro += "";
+		}
+		
+		if(mensagemErro.isBlank()) {
+			throw new CampoInvalidoException(mensagemErro);
+		}
+		else {
+			user = usuarioRepository.findByEmail(usuario.getEmail());
+		}
+		
+		
+		return user;
+	}
+	
 	public void validarAtributosDeUsuario(Usuario usuario) throws CampoInvalidoException {
 		
 		String mensagem ="";
@@ -56,15 +80,15 @@ public class UsuarioService {
 		
 	}
 	
-	public boolean validarNome(String nome) {
-		return nome.matches("X{n,}");
+	private boolean validarNome(String nome) {
+		return nome.matches("X{3,}");
 	}
 	
-	public boolean validarEmail(String email) {
+	private boolean validarEmail(String email) {
 		return email.matches("[\\w.-]+@gmail.com$");
 	}
 	
-	public boolean validarSenha(String senha) {
+	private boolean validarSenha(String senha) {
 		return senha.matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$");
 	}
 	
