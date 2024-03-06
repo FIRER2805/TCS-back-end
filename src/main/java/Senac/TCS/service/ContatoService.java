@@ -16,11 +16,16 @@ public class ContatoService {
 	private ContatoRepository contatoRepository;
 
 	public Contato criarContato(Contato contato) {
-		String master = contato.getNumero();
-		String target = "@c.us";
-		String replacement = "";
-		contato.setNumero(master.replace(target, replacement));
-		return contatoRepository.save(contato);
+	    String numero = contato.getNumero();
+	    String numeroCorrigido = corrigirNumero(numero);
+	    contato.setNumero(numeroCorrigido);
+	    return contatoRepository.save(contato);
+	}
+
+	private String corrigirNumero(String numero) {
+	    String target = "@c.us";
+	    String replacement = "";
+	    return numero.replace(target, replacement);
 	}
 
 	public Optional<Contato> buscarContatosPorUsuario(Long idUsuario) {

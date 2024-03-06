@@ -25,33 +25,28 @@ public class ContatoController {
 	@Autowired
 	private ContatoService contatoService;
 
-	
 	@GetMapping
 	public List<Contato> listarContatos() {
 		return contatoService.listarContatos();
 	}
+
 	@PostMapping
-    public Contato adicionarAoCarrinho(@RequestBody Contato contato) {
-        return contatoService.criarContato(contato);
-    }
-    @GetMapping("/usuario/{id}")
-    public Optional<Contato> getCarrinhoByUserId(@PathVariable Long id)  {
-        return contatoService.buscarContatosPorUsuario(id);
-    }
+	public Contato criarContato(@RequestBody Contato contato) {
+		return contatoService.criarContato(contato);
+	}
 
-    @GetMapping("/{id}")
-    public Optional<Contato> buscarContatosPorUsuario (@PathVariable Long id) {
-        return contatoService.buscarContatosPorUsuario(id);
-    }
-    
-    @DeleteMapping("/{id}")
-    public void deletarContato(@PathVariable Long id)  {
-        contatoService.deletarContato(id);
-    }
+	@GetMapping("/{id}")
+	public Optional<Contato> buscarContatosPorUsuario(@PathVariable Long id) {
+		return contatoService.buscarContatosPorUsuario(id);
+	}
 
-    @PutMapping("/{id}")
-    public Contato atualizarContato(@PathVariable Long id, @RequestBody Contato contato) {
-        return contatoService.atualizarContato(id, contato);
-    }
+	@DeleteMapping("/{id}")
+	public void deletarContato(@PathVariable Long id) {
+		contatoService.deletarContato(id);
+	}
+
+	@PutMapping("/{id}")
+	public Contato atualizarContato(@PathVariable Long id, @RequestBody Contato contato) {
+		return contatoService.atualizarContato(id, contato);
+	}
 }
-
