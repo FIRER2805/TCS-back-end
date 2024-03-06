@@ -1,5 +1,6 @@
 package Senac.TCS.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import Senac.TCS.model.dto.MensagemHistoricoDto;
@@ -39,6 +40,8 @@ public class MensagemHistoricoService {
     	if(!erro.isEmpty()) {
     		throw new MensagemInvalidaException(erro);
     	}
+
+		mensagemHistorico.setDataEnvio(LocalDateTime.now());
 
 		Contato contato = contatoService.obterContatoPorNumero(mensagemHistoricoDto.getNumeroContato());
 

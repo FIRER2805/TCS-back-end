@@ -10,6 +10,8 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Entity
@@ -24,30 +26,10 @@ public class MensagemHistorico {
     @Column(name = "conteudo", nullable = false, length = 255)
     private String conteudo;
 
+	@Column(name = "data_envio")
+	private LocalDateTime dataEnvio;
+
     @Column(name = "id_contato", nullable = false)
     private Long idContato;
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getConteudo() {
-		return conteudo;
-	}
-
-	public void setConteudo(String conteudo) {
-		this.conteudo = conteudo;
-	}
-
-	public Long getIdContato() {
-		return idContato;
-	}
-
-	public void setIdContato(Long idContato) {
-		this.idContato = idContato;
-	}
 }

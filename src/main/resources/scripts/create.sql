@@ -45,6 +45,7 @@ CREATE TABLE mensagem (
 CREATE TABLE mensagem_historico(
 	id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	conteudo VARCHAR(255) NOT NULL,
+	data_envio DATETIME NOT NULL,
 	id_contato BIGINT NOT NULL,
 	FOREIGN KEY (id_contato) references contato(id)
 );
