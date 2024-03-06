@@ -20,6 +20,9 @@ public class MensagemHistoricoService {
 	@Autowired
 	private ContatoService contatoService;
 
+	@Autowired
+	private MensagemService mensagemService;
+
     public List<MensagemHistorico> listarTodasMensagens() {
         return (List<MensagemHistorico>) mensagemHistoricoRepository.findAll();
     }

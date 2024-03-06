@@ -29,9 +29,17 @@ public class MensagemService {
     }
     
     public Mensagem obterProximaMensagem(MensagemSeletor seletor) {
+		boolean inputValido = verificarExistenciaMensagemPorInput(seletor.getInputPai());
+		if(!inputValido){
+			seletor.setInputPai(null);
+		}
     	Specification<Mensagem> query = MensagemSpecification.proximaMensagem(seletor);
     	return mensagemRepository.findOne(query).orElse(null);
     }
+
+	public boolean verificarExistenciaMensagemPorInput(String input){
+		return mensagemRepository.existsByInputPai(input);
+	}
 
     public Mensagem criarMensagem(Mensagem mensagem) throws MensagemInvalidaException {
     	String erro = this.validarMensagem(mensagem);

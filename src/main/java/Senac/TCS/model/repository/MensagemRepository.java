@@ -11,5 +11,5 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MensagemRepository extends CrudRepository<Mensagem,Long>, JpaSpecificationExecutor<Mensagem> {
-	
+	public boolean existsByInputPai(String input);
 }
