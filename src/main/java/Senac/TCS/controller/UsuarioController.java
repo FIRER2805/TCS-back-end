@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import Senac.TCS.exception.CampoInvalidoException;
+import Senac.TCS.exception.UsuarioInvalidoException;
 import Senac.TCS.model.entity.Usuario;
 import Senac.TCS.service.UsuarioService;
 
@@ -25,7 +26,13 @@ public class UsuarioController {
 
 	@PostMapping
 	public Usuario criar(@RequestBody Usuario usuario) {
-		return service.criar(usuario);
+
+		try {
+			usuario = service.criar(usuario);
+		} catch (UsuarioInvalidoException | CampoInvalidoException erro) {
+			erro.getMessage();
+		}
+		return usuario;
 	}
 
 	@GetMapping
@@ -39,43 +46,35 @@ public class UsuarioController {
 	}
 
 	@PutMapping("/{id}")
-	public Usuario atualizarPorId(@RequestBody Usuario usuario) {
-		return service.atualizarPorId(usuario);
+	public Usuario atualizarUsuario(@RequestBody Usuario usuario) {
+		try {
+			return service.atualizarUsuario(usuario);
+		} catch (CampoInvalidoException erro) {
+			erro.getMessage();
+		}
+
+		return usuario;
 	}
-	
+
 	@DeleteMapping("/{id}")
 	public void excluirPorId(@PathVariable Long id) {
 		service.excluirPorId(id);
 	}
-	
-	
-	
+
 	public Usuario efetuarLogin(Usuario usuario) {
+
 		try {
 			Usuario user = service.efetuarLogin(usuario);
 			usuario = user;
-			
-		} catch (CampoInvalidoException e) {
-			e.printStackTrace();
+
+		} catch (CampoInvalidoException erro) {
+			erro.getMessage();
 		}
 		return usuario;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+	public void recuperarSenha(String email) {
+
+	}
+
 }

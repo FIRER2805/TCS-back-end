@@ -1,11 +1,13 @@
 package Senac.TCS.service;
 
+import java.security.SecureRandom;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import Senac.TCS.exception.CampoInvalidoException;
+import Senac.TCS.exception.UsuarioInvalidoException;
 import Senac.TCS.model.entity.Usuario;
 import Senac.TCS.model.repository.UsuarioRepository;
 
@@ -17,7 +19,14 @@ public class UsuarioService {
 	
 	Usuario ur = new Usuario();
 
-	public Usuario criar(Usuario usuario) {
+	public Usuario criar(Usuario usuario) throws UsuarioInvalidoException, CampoInvalidoException {
+		
+		validarAtributosDeUsuario(usuario);
+		
+		if(usuarioRepository.existsByEmail(usuario.getEmail())) {
+			throw new UsuarioInvalidoException("Email ja Existente");
+		}
+		
 		return usuarioRepository.save(usuario);
 	}
 	
@@ -29,7 +38,10 @@ public class UsuarioService {
 		return usuarioRepository.findById(id).orElse(null);
 	}
 
-	public Usuario atualizarPorId(Usuario usuario) {
+	public Usuario atualizarUsuario(Usuario usuario) throws CampoInvalidoException {
+		
+validarAtributosDeUsuario(usuario);		
+		
 		return usuarioRepository.save(usuario);
 	}
 
@@ -91,5 +103,38 @@ public class UsuarioService {
 	private boolean validarSenha(String senha) {
 		return senha.matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$");
 	}
+	
+	
+	
+	public String recuperarSenha(String email) {
+		SecureRandom gerador = new SecureRandom();
+		StringBuilder senha = new StringBuilder();
+		
+		String Letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        
+        for (int i = 0; i < 8; i++) {
+            int indiceAleatorio = gerador.nextInt(Letras.length());
+            senha.append(Letras.charAt(indiceAleatorio));
+        }
+        
+        return senha.toString();
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }
