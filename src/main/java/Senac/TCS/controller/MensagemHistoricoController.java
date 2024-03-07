@@ -1,8 +1,8 @@
 package Senac.TCS.controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
-import Senac.TCS.model.dto.MensagemHistoricoDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import Senac.TCS.exception.MensagemInvalidaException;
-import Senac.TCS.model.entity.Mensagem;
+import Senac.TCS.model.dto.MensagemDTO;
+import Senac.TCS.model.dto.MensagemHistoricoDto;
 import Senac.TCS.model.entity.MensagemHistorico;
 import Senac.TCS.service.MensagemHistoricoService;
-import Senac.TCS.service.MensagemService;
 
 @RestController
 @RequestMapping("/historico-mensagem")
@@ -44,6 +44,14 @@ public class MensagemHistoricoController {
     	catch(MensagemInvalidaException e) {
     		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     	}
+    }
+    
+    // teste
+    @PostMapping("/tempoUltimaMensagem")
+    public ResponseEntity<LocalDateTime> obterTempoUltimaMensagemRecebida(@RequestBody MensagemDTO mensagemDto){
+    	LocalDateTime retorno = this.mensagemHistoricoService.obterTempoUltimaMensagemRecebidaPorContato(mensagemDto);
+    	System.out.println(retorno);
+    	return new ResponseEntity<>(retorno, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")

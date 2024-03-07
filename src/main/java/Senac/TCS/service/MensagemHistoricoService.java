@@ -3,12 +3,13 @@ package Senac.TCS.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import Senac.TCS.model.dto.MensagemHistoricoDto;
-import Senac.TCS.model.entity.Contato;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import Senac.TCS.exception.MensagemInvalidaException;
+import Senac.TCS.model.dto.MensagemDTO;
+import Senac.TCS.model.dto.MensagemHistoricoDto;
+import Senac.TCS.model.entity.Contato;
 import Senac.TCS.model.entity.MensagemHistorico;
 import Senac.TCS.model.repository.MensagemHistoricoRepository;
 
@@ -20,9 +21,6 @@ public class MensagemHistoricoService {
 	@Autowired
 	private ContatoService contatoService;
 
-	@Autowired
-	private MensagemService mensagemService;
-
     public List<MensagemHistorico> listarTodasMensagens() {
         return (List<MensagemHistorico>) mensagemHistoricoRepository.findAll();
     }
@@ -33,6 +31,11 @@ public class MensagemHistoricoService {
 
     public MensagemHistorico obterMensagemPorId(Long id) {
     	return mensagemHistoricoRepository.findById(id).orElse(null);
+    }
+    
+    public LocalDateTime obterTempoUltimaMensagemRecebidaPorContato(MensagemDTO mensagemDto) {
+    	Contato contato = contatoService.obterContatoPorNumero(mensagemDto.getNumeroContato());
+    	return mensagemHistoricoRepository.obterDataUltimaMensagem(contato.getId(),mensagemDto.getIdUsuario());
     }
 
     public MensagemHistorico criarMensagem(MensagemHistoricoDto mensagemHistoricoDto) throws MensagemInvalidaException {

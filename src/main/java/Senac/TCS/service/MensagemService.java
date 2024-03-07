@@ -1,7 +1,8 @@
 package Senac.TCS.service;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
@@ -11,7 +12,6 @@ import Senac.TCS.exception.MensagemInvalidaException;
 import Senac.TCS.model.dto.MensagemDTO;
 import Senac.TCS.model.entity.Mensagem;
 import Senac.TCS.model.repository.MensagemRepository;
-import Senac.TCS.model.seletor.MensagemSeletor;
 import Senac.TCS.model.specification.MensagemSpecification;
 
 @Service
@@ -19,6 +19,9 @@ public class MensagemService {
 
     @Autowired
     private MensagemRepository mensagemRepository;
+    
+    @Autowired
+    private MensagemHistoricoService mensagemHistoricoService;
 
     public List<Mensagem> listarTodasMensagens() {
         return (List<Mensagem>) mensagemRepository.findAll();
@@ -28,12 +31,20 @@ public class MensagemService {
     	return mensagemRepository.findById(id).orElse(null);
     }
     
-    public Mensagem obterProximaMensagem(MensagemSeletor seletor) {
-		boolean inputValido = verificarExistenciaMensagemPorInput(seletor.getInputPai());
-		if(!inputValido){
-			seletor.setInputPai(null);
+    public Mensagem obterProximaMensagem(MensagemDTO mensagem) {
+		boolean inputValido = verificarExistenciaMensagemPorInput(mensagem.getInputPai());
+		
+		LocalDateTime tempoUltimaMensagem = mensagemHistoricoService.obterTempoUltimaMensagemRecebidaPorContato(mensagem);
+		Long diferencaMinutos = ChronoUnit.MINUTES.between(tempoUltimaMensagem, LocalDateTime.now());
+		
+		if(diferencaMinutos > 5) {
+			Specification<Mensagem> query = MensagemSpecification.mensagemRoot(mensagem);
 		}
-    	Specification<Mensagem> query = MensagemSpecification.proximaMensagem(seletor);
+		else {
+			
+		}
+		
+    	Specification<Mensagem> query = MensagemSpecification.proximaMensagem(mensagem);
     	return mensagemRepository.findOne(query).orElse(null);
     }
 

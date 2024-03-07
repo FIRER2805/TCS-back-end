@@ -2,34 +2,32 @@ package Senac.TCS.model.specification;
 
 import java.util.ArrayList;
 
-import Senac.TCS.service.MensagemService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 
+import Senac.TCS.model.dto.MensagemDTO;
 import Senac.TCS.model.entity.Mensagem;
-import Senac.TCS.model.seletor.MensagemSeletor;
 import jakarta.persistence.criteria.Predicate;
 
 public class MensagemSpecification {
 
-	public static Specification<Mensagem> proximaMensagem(MensagemSeletor seletor){
+	public static Specification<Mensagem> proximaMensagem(MensagemDTO mensagemDto){
 		return (root, query, cb) -> {
 			ArrayList<Predicate> predicates = new ArrayList();
 
-			predicates.add(cb.equal(root.get("idSetor"), seletor.getIdSetor()));
-			predicates.add(cb.equal(root.get("idMensagemPai"), seletor.getIdMensagemPai()));
-			predicates.add(cb.like(root.get("inputPai"), seletor.getInputPai()));
+			predicates.add(cb.equal(root.get("idSetor"), mensagemDto.getIdSetor()));
+			predicates.add(cb.equal(root.get("idMensagemPai"), mensagemDto.getIdMensagemPai()));
+			predicates.add(cb.like(root.get("inputPai"), mensagemDto.getInputPai()));
 
 
 			return cb.and(predicates.toArray(new Predicate[0]));
 		};
 	}
 
-	public static Specification<Mensagem> mensagemRoot(MensagemSeletor seletor){
+	public static Specification<Mensagem> mensagemRoot(MensagemDTO mensagemDto){
 		return (root, query, cb) -> {
 			ArrayList<Predicate> predicates = new ArrayList();
 
-			predicates.add(cb.equal(root.get("idSetor"), seletor.getIdSetor()));
+			predicates.add(cb.equal(root.get("idSetor"), mensagemDto.getIdSetor()));
 			predicates.add(cb.isNull(root.get("idMensagemPai")));
 			predicates.add(cb.isNull(root.get("inputPai")));
 

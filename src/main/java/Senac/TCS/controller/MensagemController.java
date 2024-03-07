@@ -42,8 +42,8 @@ public class MensagemController {
     }
 
     @PostMapping("/proximo")
-    public ResponseEntity<Mensagem> obterProximaMensagem(@RequestBody MensagemSeletor seletor){
-        return new ResponseEntity<Mensagem>(mensagemService.obterProximaMensagem(seletor), HttpStatus.OK);
+    public ResponseEntity<Mensagem> obterProximaMensagem(@RequestBody MensagemDTO mensagemDto){
+        return new ResponseEntity<Mensagem>(mensagemService.obterProximaMensagem(mensagemDto), HttpStatus.OK);
     }
 
 
