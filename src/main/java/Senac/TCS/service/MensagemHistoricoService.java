@@ -35,7 +35,8 @@ public class MensagemHistoricoService {
     
     public LocalDateTime obterTempoUltimaMensagemRecebidaPorContato(MensagemDTO mensagemDto) {
     	Contato contato = contatoService.obterContatoPorNumero(mensagemDto.getNumeroContato());
-    	return mensagemHistoricoRepository.obterDataUltimaMensagem(contato.getId(),mensagemDto.getIdUsuario());
+    	LocalDateTime dataRetornada = mensagemHistoricoRepository.obterDataUltimaMensagem(contato.getId(),mensagemDto.getIdUsuario());
+    	return dataRetornada;
     }
 
     public MensagemHistorico criarMensagem(MensagemHistoricoDto mensagemHistoricoDto) throws MensagemInvalidaException {

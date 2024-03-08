@@ -18,8 +18,8 @@ public interface MensagemHistoricoRepository extends CrudRepository<MensagemHist
 			+ "c.id = mh.id_contato "
 			+ "join usuario u on "
 			+ "u.id = c.id_usuario "
-			+ "where mh.id_contato = 1? "
-			+ "AND u.id = 2? "
+			+ "where mh.id_contato = ?1 "
+			+ "AND u.id = ?2 "
 			+ "order by mh.data_envio desc "
 			+ "limit 1;", nativeQuery = true)
 	public LocalDateTime obterDataUltimaMensagem(Long idContato, Long idUsuario);
