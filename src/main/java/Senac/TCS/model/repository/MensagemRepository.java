@@ -12,4 +12,10 @@ import java.util.Optional;
 
 public interface MensagemRepository extends CrudRepository<Mensagem,Long>, JpaSpecificationExecutor<Mensagem> {
 	public boolean existsByInputPai(String input);
+
+	@Query(value="select m.input_pai " +
+			"from mensagem m " +
+			"where id_setor = ?1 AND id_mensagem_pai = ?2 ; "
+			, nativeQuery = true)
+	public List<String> obterInputsValidos(Long idSetor, Long idMensagemPai);
 }

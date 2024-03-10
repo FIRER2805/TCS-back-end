@@ -50,6 +50,7 @@ public class MensagemHistoricoService {
 
 		mensagemHistorico.setDataEnvio(LocalDateTime.now());
 
+		// TODO regra de negócio: mais de um usuário podem ter um contato com o mesmo numero, adicionar isto na query
 		Contato contato = contatoService.obterContatoPorNumero(mensagemHistoricoDto.getNumeroContato());
 
 		if(contato == null){

@@ -3,6 +3,7 @@ package Senac.TCS.service;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
@@ -32,24 +33,52 @@ public class MensagemService {
     }
     
     public Mensagem obterProximaMensagem(MensagemDTO mensagem) {
-		boolean inputValido = verificarExistenciaMensagemPorInput(mensagem.getInputPai());
+		Mensagem retorno;
+		List<String> inputsValidos;
+
+		// boolean inputValido = verificarExistenciaMensagemPorInput(mensagem.getInputPai());
 		
 		LocalDateTime tempoUltimaMensagem = mensagemHistoricoService.obterTempoUltimaMensagemRecebidaPorContato(mensagem);
 		Long diferencaMinutos = ChronoUnit.MINUTES.between(tempoUltimaMensagem, LocalDateTime.now());
-		
+
+		Specification<Mensagem> query;
+
 		if(diferencaMinutos > 5) {
-			Specification<Mensagem> query = MensagemSpecification.mensagemRoot(mensagem);
+			query = MensagemSpecification.mensagemRoot(mensagem);
 		}
 		else {
-			
+			query = MensagemSpecification.proximaMensagem(mensagem);
 		}
-		
-    	Specification<Mensagem> query = MensagemSpecification.proximaMensagem(mensagem);
-    	return mensagemRepository.findOne(query).orElse(null);
+
+		Mensagem mensagemErro = new Mensagem();
+		mensagemErro.setIdMensagemPai(mensagem.getIdMensagemPai());
+		mensagemErro.setIdSetor(mensagem.getIdSetor());
+		mensagemErro.setConteudo("Input Invalido");
+
+    	Optional<Mensagem> mensagemRetorno = mensagemRepository.findOne(query);
+
+		if(mensagemRetorno.isPresent()){
+			retorno = mensagemRetorno.get();
+			inputsValidos = this.obterInputsValidos(mensagem.getIdSetor(), retorno.getId());
+		}
+		else{
+			retorno = mensagemErro;
+			inputsValidos = this.obterInputsValidos(mensagem.getIdSetor(), mensagemErro.getIdMensagemPai());
+		}
+
+		for(String input : inputsValidos){
+			retorno.setConteudo(retorno.getConteudo() + " \n " + input);
+		}
+
+		return retorno;
     }
 
-	public boolean verificarExistenciaMensagemPorInput(String input){
+	private boolean verificarExistenciaMensagemPorInput(String input){
 		return mensagemRepository.existsByInputPai(input);
+	}
+
+	private List<String> obterInputsValidos(Long idSetor, Long idMensagemPai){
+		return mensagemRepository.obterInputsValidos(idSetor, idMensagemPai);
 	}
 
     public Mensagem criarMensagem(Mensagem mensagem) throws MensagemInvalidaException {
