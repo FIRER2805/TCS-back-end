@@ -43,7 +43,7 @@ public class MensagemService {
 
 		Specification<Mensagem> query;
 
-		if(diferencaMinutos > 5) {
+		if(diferencaMinutos > 5 || mensagem.getIdMensagemPai() == null) {
 			query = MensagemSpecification.mensagemRoot(mensagem);
 		}
 		else {
