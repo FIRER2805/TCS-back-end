@@ -26,9 +26,8 @@ public class Contato {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-//	@ManyToOne(fetch = FetchType.LAZY)
-//	@JoinColumn(name = "id_usuario", referencedColumnName = "id")
-//	private Usuario usuario;
+	@Column(name = "id_usuario")
+	private Long usuario;
 
 	@Column(name = "nome", nullable = false)
 	private String nome;
