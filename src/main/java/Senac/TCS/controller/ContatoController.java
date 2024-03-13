@@ -25,7 +25,6 @@ public class ContatoController {
 	@Autowired
 	private ContatoService contatoService;
 
-	
 	@GetMapping
 	public List<Contato> listarContatos() {
 		return contatoService.listarContatos();

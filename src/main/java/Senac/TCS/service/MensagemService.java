@@ -24,6 +24,9 @@ public class MensagemService {
     @Autowired
     private MensagemHistoricoService mensagemHistoricoService;
 
+	@Autowired
+	private ContatoService contatoService;
+
     public List<Mensagem> listarTodasMensagens() {
         return (List<Mensagem>) mensagemRepository.findAll();
     }
@@ -35,13 +38,14 @@ public class MensagemService {
     public Mensagem obterProximaMensagem(MensagemDTO mensagem) {
 		Mensagem retorno;
 		List<String> inputsValidos;
-
-		// boolean inputValido = verificarExistenciaMensagemPorInput(mensagem.getInputPai());
-		
-		LocalDateTime tempoUltimaMensagem = mensagemHistoricoService.obterTempoUltimaMensagemRecebidaPorContato(mensagem);
-		Long diferencaMinutos = ChronoUnit.MINUTES.between(tempoUltimaMensagem, LocalDateTime.now());
-
+		LocalDateTime tempoUltimaMensagem = null;
+		long diferencaMinutos = 0L;
 		Specification<Mensagem> query;
+
+		if(contatoService.obterContatoPorNumero(mensagem.getNumeroContato()) != null){
+			tempoUltimaMensagem = mensagemHistoricoService.obterTempoUltimaMensagemRecebidaPorContato(mensagem);
+			diferencaMinutos = ChronoUnit.MINUTES.between(tempoUltimaMensagem, LocalDateTime.now());
+		}
 
 		if(diferencaMinutos > 5 || mensagem.getIdMensagemPai() == null) {
 			query = MensagemSpecification.mensagemRoot(mensagem);
