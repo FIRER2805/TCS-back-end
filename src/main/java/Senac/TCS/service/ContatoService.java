@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import Senac.TCS.exception.ContatoException;
 import Senac.TCS.model.entity.Contato;
 import Senac.TCS.model.repository.ContatoRepository;
 
@@ -26,10 +27,6 @@ public class ContatoService {
 	    String target = "@c.us";
 	    String replacement = "";
 	    return numero.replace(target, replacement);
-	}
-
-	public Optional<Contato> buscarContatosPorUsuario(Long idUsuario) {
-		return contatoRepository.findById(idUsuario);
 	}
 
 	public Optional<Contato> buscarContatoPorId(Long id) {
@@ -53,5 +50,14 @@ public class ContatoService {
 	public List<Contato> listarContatos() {
 		return contatoRepository.findAll();
 	}
+	public void existencia(String numero) throws ContatoException {
+	    if (!contatoRepository.existsByNumero(numero)) {
+	        throw new ContatoException("Contato com o número " + numero + " não encontrado.");
+	    }
+	}
+	public List<Contato> findContatosByUsuario(Long idUsuario) {
+		return contatoRepository.findContatosByUsuario(idUsuario);
+       
+    }
 
 }

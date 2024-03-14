@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import Senac.TCS.exception.ContatoException;
 import Senac.TCS.model.entity.Contato;
 import Senac.TCS.service.ContatoService;
 
@@ -35,10 +38,14 @@ public class ContatoController {
 		return contatoService.criarContato(contato);
 	}
 
-	@GetMapping("/{id}")
-	public Optional<Contato> buscarContatosPorUsuario(@PathVariable Long id) {
-		return contatoService.buscarContatosPorUsuario(id);
-	}
+	@GetMapping("/usuario/{idUsuario}")
+    public ResponseEntity<List<Contato>> buscarContatosPorUsuario(@PathVariable Long idUsuario) {
+        List<Contato> contatos = contatoService.findContatosByUsuario(idUsuario);
+        if (contatos.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(contatos);
+    }
 
 	@DeleteMapping("/{id}")
 	public void deletarContato(@PathVariable Long id) {
@@ -49,4 +56,14 @@ public class ContatoController {
 	public Contato atualizarContato(@PathVariable Long id, @RequestBody Contato contato) {
 		return contatoService.atualizarContato(id, contato);
 	}
+	@GetMapping("/existencia/{numero}")
+    public ResponseEntity<String> verificarExistencia(@PathVariable String numero) {
+        try {
+            contatoService.existencia(numero);
+            return ResponseEntity.ok("Contato com o número " + numero + " encontrado.");
+        } catch (ContatoException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage()+ "Aleluia");
+        }
+    }
+	
 }
