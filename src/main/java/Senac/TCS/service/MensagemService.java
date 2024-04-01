@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,8 @@ import Senac.TCS.model.specification.MensagemSpecification;
 
 @Service
 public class MensagemService {
+
+	final private int TEMPO_RESET_CONVERSA = 5;
 
     @Autowired
     private MensagemRepository mensagemRepository;
@@ -35,39 +38,27 @@ public class MensagemService {
     	return mensagemRepository.findById(id).orElse(null);
     }
     
-    public Mensagem obterProximaMensagem(MensagemDTO mensagem) {
-		Mensagem retorno;
-		List<String> inputsValidos;
-		LocalDateTime tempoUltimaMensagem = null;
-		long diferencaMinutos = 0L;
+    public Mensagem obterProximaMensagem(MensagemDTO mensagemDTO) {
 		Specification<Mensagem> query;
-
-		if(contatoService.obterContatoPorNumero(mensagem.getNumeroContato()) != null){
-			tempoUltimaMensagem = mensagemHistoricoService.obterTempoUltimaMensagemRecebidaPorContato(mensagem);
-			diferencaMinutos = ChronoUnit.MINUTES.between(tempoUltimaMensagem, LocalDateTime.now());
-		}
-
-		if(diferencaMinutos > 5 || mensagem.getIdMensagemPai() == null) {
-			query = MensagemSpecification.mensagemRoot(mensagem);
+		long diferencaMinutos = this.tempoDesdeUltimaMensagemEmMinutos(mensagemDTO);
+		if(diferencaMinutos > TEMPO_RESET_CONVERSA || mensagemDTO.getIdMensagemPai() == null) {
+			query = MensagemSpecification.mensagemRoot(mensagemDTO);
 		}
 		else {
-			query = MensagemSpecification.proximaMensagem(mensagem);
+			query = MensagemSpecification.proximaMensagem(mensagemDTO);
 		}
-
-		Mensagem mensagemErro = new Mensagem();
-		mensagemErro.setIdMensagemPai(mensagem.getIdMensagemPai());
-		mensagemErro.setIdSetor(mensagem.getIdSetor());
-		mensagemErro.setConteudo("Input Invalido");
 
     	Optional<Mensagem> mensagemRetorno = mensagemRepository.findOne(query);
 
+		Mensagem retorno;
+		List<String> inputsValidos;
 		if(mensagemRetorno.isPresent()){
 			retorno = mensagemRetorno.get();
-			inputsValidos = this.obterInputsValidos(mensagem.getIdSetor(), retorno.getId());
+			inputsValidos = this.obterInputsValidos(mensagemDTO.getIdSetor(), retorno.getId());
 		}
 		else{
-			retorno = mensagemErro;
-			inputsValidos = this.obterInputsValidos(mensagem.getIdSetor(), mensagemErro.getIdMensagemPai());
+			retorno = this.mensagemErro(mensagemDTO);
+			inputsValidos = this.obterInputsValidos(mensagemDTO.getIdSetor(), retorno.getIdMensagemPai());
 		}
 
 		for(String input : inputsValidos){
@@ -136,5 +127,22 @@ public class MensagemService {
 		}
 		erro += this.validarMensagem(mensagem);
 		return erro;
+	}
+
+	private Long tempoDesdeUltimaMensagemEmMinutos(MensagemDTO mensagemDTO){
+		Long retorno = null;
+		if(contatoService.obterContatoPorNumero(mensagemDTO.getNumeroContato()) != null){
+			LocalDateTime tempoUltimaMensagem = mensagemHistoricoService.obterTempoUltimaMensagemRecebidaPorContato(mensagemDTO);
+			retorno = ChronoUnit.MINUTES.between(tempoUltimaMensagem, LocalDateTime.now());
+		}
+		return retorno;
+	}
+
+	private Mensagem mensagemErro(MensagemDTO mensagemDTO){
+		Mensagem mensagemErro = new Mensagem();
+		mensagemErro.setIdMensagemPai(mensagemDTO.getIdMensagemPai());
+		mensagemErro.setIdSetor(mensagemDTO.getIdSetor());
+		mensagemErro.setConteudo("Input Invalido");
+		return mensagemErro;
 	}
 }
