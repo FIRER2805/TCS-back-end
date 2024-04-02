@@ -1,20 +1,30 @@
 package Senac.TCS.model.entity;
 
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
+
+@Getter
+@Setter
 @Entity
+@Table(name="usuario")
 public class Usuario {
 	
-	public Usuario(Long id, String nome, String email, String senha, String telefone) {
+	public Usuario(Long id, String nome, String email, String senha) {
 		super();
 		this.id = id;
 		this.nome = nome;
 		this.email = email;
 		this.senha = senha;
-		this.telefone = telefone;
 	}
 	public Usuario() {
 		super();
@@ -22,13 +32,13 @@ public class Usuario {
 	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-	Long id;
+	private Long id;
 	private String nome;
 	private String email;
 	private String senha;
-	private String telefone;
 	
-	
+	@OneToMany(mappedBy="telefones")
+	private List<Telefone> telefones;
 	
 	public Long getId() {
 		return id;
@@ -54,11 +64,10 @@ public class Usuario {
 	public void setSenha(String senha) {
 		this.senha = senha;
 	}
-	public String getTelefone() {
-		return telefone;
+	public List<Telefone> getTelefones() {
+		return telefones;
 	}
-	public void setTelefone(String telefone) {
-		this.telefone = telefone;
+	public void setTelefones(List<Telefone> telefones) {
+		this.telefones = telefones;
 	}
-
 }

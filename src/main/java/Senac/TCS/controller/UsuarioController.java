@@ -48,7 +48,7 @@ public class UsuarioController {
 	@PutMapping("/{id}")
 	public Usuario atualizarUsuario(@RequestBody Usuario usuario) {
 		try {
-			return service.atualizarUsuario(usuario);
+			usuario = service.atualizarUsuario(usuario);
 		} catch (CampoInvalidoException erro) {
 			erro.getMessage();
 		}
@@ -64,9 +64,7 @@ public class UsuarioController {
 	public Usuario efetuarLogin(Usuario usuario) {
 
 		try {
-			Usuario user = service.efetuarLogin(usuario);
-			usuario = user;
-
+			 usuario = service.efetuarLogin(usuario);
 		} catch (CampoInvalidoException erro) {
 			erro.getMessage();
 		}

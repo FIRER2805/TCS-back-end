@@ -16,20 +16,18 @@ public class UsuarioService {
 
 	@Autowired
 	private UsuarioRepository usuarioRepository;
-	
-	Usuario ur = new Usuario();
 
 	public Usuario criar(Usuario usuario) throws UsuarioInvalidoException, CampoInvalidoException {
-		
+
 		validarAtributosDeUsuario(usuario);
-		
-		if(usuarioRepository.existsByEmail(usuario.getEmail())) {
-			throw new UsuarioInvalidoException("Email ja Existente");
+
+		if (usuarioRepository.existsByEmail(usuario.getEmail())) {
+			throw new UsuarioInvalidoException("Email ja Cadastrado");
 		}
-		
+
 		return usuarioRepository.save(usuario);
 	}
-	
+
 	public List<Usuario> buscarTodos() {
 		return usuarioRepository.findAll();
 	}
@@ -39,102 +37,80 @@ public class UsuarioService {
 	}
 
 	public Usuario atualizarUsuario(Usuario usuario) throws CampoInvalidoException {
-		
-validarAtributosDeUsuario(usuario);		
-		
+
+		validarAtributosDeUsuario(usuario);
+
 		return usuarioRepository.save(usuario);
 	}
 
 	public void excluirPorId(Long id) {
 		usuarioRepository.deleteById(id);
 	}
-	
+
 	public Usuario efetuarLogin(Usuario usuario) throws CampoInvalidoException {
-		
-		String mensagemErro = ""; 
-		Usuario user = null;
-		
-		if(usuarioRepository.existsByEmail(usuario.getEmail())) {
+
+		String mensagemErro = "";
+
+		if (usuarioRepository.existsByEmail(usuario.getEmail())) {
 			mensagemErro += "";
 		}
-		
-		if(usuarioRepository.existsBySenha(usuario.getEmail())) {
+
+		if (usuarioRepository.existsBySenha(usuario.getEmail())) {
 			mensagemErro += "";
 		}
-		
-		if(mensagemErro.isBlank()) {
+
+		if (mensagemErro.isBlank()) {
 			throw new CampoInvalidoException(mensagemErro);
+		} else {
+			usuario = usuarioRepository.findByEmail(usuario.getEmail());
 		}
-		else {
-			user = usuarioRepository.findByEmail(usuario.getEmail());
-		}
-		
-		
-		return user;
+
+		return usuario;
 	}
-	
+
 	public void validarAtributosDeUsuario(Usuario usuario) throws CampoInvalidoException {
-		
-		String mensagem ="";
-		if(validarNome(usuario.getNome())) {
+
+		String mensagem = "";
+		if (validarNome(usuario.getNome())) {
 			mensagem += "\nNome invalido";
 		}
-		if(validarEmail(usuario.getEmail())) {
+		if (validarEmail(usuario.getEmail())) {
 			mensagem += "\nEmail invalido";
 		}
-		if(validarSenha(usuario.getSenha())) {
+		if (validarSenha(usuario.getSenha())) {
 			mensagem += "\nSenha invalido";
 		}
-		
-		if(mensagem.isBlank()) {
+
+		if (mensagem.isBlank()) {
 			throw new CampoInvalidoException(mensagem);
 		}
-		
+
 	}
-	
+
 	private boolean validarNome(String nome) {
 		return nome.matches("X{3,}");
 	}
-	
+
 	private boolean validarEmail(String email) {
 		return email.matches("[\\w.-]+@gmail.com$");
 	}
-	
+
 	private boolean validarSenha(String senha) {
 		return senha.matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$");
 	}
-	
-	
-	
+
 	public String recuperarSenha(String email) {
 		SecureRandom gerador = new SecureRandom();
 		StringBuilder senha = new StringBuilder();
-		
+
 		String Letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        
-        for (int i = 0; i < 8; i++) {
-            int indiceAleatorio = gerador.nextInt(Letras.length());
-            senha.append(Letras.charAt(indiceAleatorio));
-        }
-        
-        return senha.toString();
+
+		for (int i = 0; i < 8; i++) {
+			int indiceAleatorio = gerador.nextInt(Letras.length());
+			senha.append(Letras.charAt(indiceAleatorio));
+		}
+
+		return senha.toString();
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 }
