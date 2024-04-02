@@ -4,26 +4,17 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import Senac.TCS.model.dto.MensagemDTO;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Mensagem {
-	
-    public Mensagem() {
-		super();
-	}
-    
-	public Mensagem(MensagemDTO dto) {
-        this.id = dto.getId();
-        this.conteudo = dto.getConteudo();
-        this.idSetor = dto.getIdSetor();
-        this.inputPai = dto.getInputPai();
-    }
 	
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,44 +28,4 @@ public class Mensagem {
     private String inputPai;
     @Column(name = "id_mensagem_pai")
     private Long idMensagemPai;
-    
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getConteudo() {
-		return conteudo;
-	}
-
-	public void setConteudo(String conteudo) {
-		this.conteudo = conteudo;
-	}
-
-	public Long getIdSetor() {
-		return idSetor;
-	}
-
-	public void setIdSetor(Long idSetor) {
-		this.idSetor = idSetor;
-	}
-
-	public String getInputPai() {
-		return inputPai;
-	}
-
-	public void setInputPai(String inputPai) {
-		this.inputPai = inputPai;
-	}
-
-	public Long getIdMensagemPai() {
-		return idMensagemPai;
-	}
-
-	public void setIdMensagemPai(Long idMensagemPai) {
-		this.idMensagemPai = idMensagemPai;
-	}
 }

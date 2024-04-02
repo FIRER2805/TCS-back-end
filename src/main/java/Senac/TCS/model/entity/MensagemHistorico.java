@@ -7,13 +7,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "mensagem_historico")
 public class MensagemHistorico {
@@ -31,36 +33,4 @@ public class MensagemHistorico {
 
     @Column(name = "id_contato", nullable = false)
     private Long idContato;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getConteudo() {
-		return conteudo;
-	}
-
-	public void setConteudo(String conteudo) {
-		this.conteudo = conteudo;
-	}
-
-	public LocalDateTime getDataEnvio() {
-		return dataEnvio;
-	}
-
-	public void setDataEnvio(LocalDateTime dataEnvio) {
-		this.dataEnvio = dataEnvio;
-	}
-
-	public Long getIdContato() {
-		return idContato;
-	}
-
-	public void setIdContato(Long idContato) {
-		this.idContato = idContato;
-	}
 }

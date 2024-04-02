@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -20,13 +19,10 @@ import Senac.TCS.model.specification.MensagemSpecification;
 public class MensagemService {
 
 	final private int TEMPO_RESET_CONVERSA = 5;
-
     @Autowired
     private MensagemRepository mensagemRepository;
-    
     @Autowired
     private MensagemHistoricoService mensagemHistoricoService;
-
 	@Autowired
 	private ContatoService contatoService;
 
@@ -40,8 +36,8 @@ public class MensagemService {
     
     public Mensagem obterProximaMensagem(MensagemDTO mensagemDTO) {
 		Specification<Mensagem> query;
-		long diferencaMinutos = this.tempoDesdeUltimaMensagemEmMinutos(mensagemDTO);
-		if(diferencaMinutos > TEMPO_RESET_CONVERSA || mensagemDTO.getIdMensagemPai() == null) {
+		long minutosUltimaInteracao = this.tempoUltimaMensagemEmMinutos(mensagemDTO);
+		if(minutosUltimaInteracao > TEMPO_RESET_CONVERSA || mensagemDTO.getIdMensagemPai() == null) {
 			query = MensagemSpecification.mensagemRoot(mensagemDTO);
 		}
 		else {
@@ -129,7 +125,7 @@ public class MensagemService {
 		return erro;
 	}
 
-	private Long tempoDesdeUltimaMensagemEmMinutos(MensagemDTO mensagemDTO){
+	private Long tempoUltimaMensagemEmMinutos(MensagemDTO mensagemDTO){
 		Long retorno = null;
 		if(contatoService.obterContatoPorNumero(mensagemDTO.getNumeroContato()) != null){
 			LocalDateTime tempoUltimaMensagem = mensagemHistoricoService.obterTempoUltimaMensagemRecebidaPorContato(mensagemDTO);
@@ -139,10 +135,9 @@ public class MensagemService {
 	}
 
 	private Mensagem mensagemErro(MensagemDTO mensagemDTO){
-		Mensagem mensagemErro = new Mensagem();
-		mensagemErro.setIdMensagemPai(mensagemDTO.getIdMensagemPai());
-		mensagemErro.setIdSetor(mensagemDTO.getIdSetor());
-		mensagemErro.setConteudo("Input Invalido");
-		return mensagemErro;
+		return Mensagem.builder()
+				.idMensagemPai(mensagemDTO.getIdMensagemPai())
+				.idSetor(mensagemDTO.getIdSetor())
+				.conteudo("Input inválido").build();
 	}
 }
