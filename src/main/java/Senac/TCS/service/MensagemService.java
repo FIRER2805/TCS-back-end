@@ -44,21 +44,16 @@ public class MensagemService {
 			query = MensagemSpecification.proximaMensagem(mensagemDTO);
 		}
 
-    	Optional<Mensagem> mensagemRetorno = mensagemRepository.findOne(query);
+    	Optional<Mensagem> mensagemEncontrada = mensagemRepository.findOne(query);
 
 		Mensagem retorno;
-		List<String> inputsValidos;
-		if(mensagemRetorno.isPresent()){
-			retorno = mensagemRetorno.get();
-			inputsValidos = this.obterInputsValidos(mensagemDTO.getIdSetor(), retorno.getId());
+		if(mensagemEncontrada.isPresent()){
+			retorno = mensagemEncontrada.get();
+			this.concatenarInputsValidosNaMensagem(retorno,mensagemDTO.getIdSetor(), retorno.getId());
 		}
 		else{
 			retorno = this.mensagemErro(mensagemDTO);
-			inputsValidos = this.obterInputsValidos(mensagemDTO.getIdSetor(), retorno.getIdMensagemPai());
-		}
-
-		for(String input : inputsValidos){
-			retorno.setConteudo(retorno.getConteudo() + " \n " + input);
+			this.concatenarInputsValidosNaMensagem(retorno, mensagemDTO.getIdSetor(), retorno.getIdMensagemPai());
 		}
 
 		return retorno;
@@ -102,12 +97,10 @@ public class MensagemService {
     		if(mensagem.getConteudo().isBlank()) {
     			erro += "Não há conteudo na mensagem \n";
     		}
-    		// verifica caso for mensagem root, não pode ter um input pai
     		if((mensagem.getIdMensagemPai() == null) &&
     				!(mensagem.getInputPai() == null || mensagem.getInputPai().isBlank())) {
     			erro += "Mensagem root não pode ter inputPai \n";
     		}
-    		// verifica se for mensagem filha, ela precisa ter inputPai
     		if((mensagem.getIdMensagemPai() != null) &&
     				(mensagem.getInputPai() == null || mensagem.getInputPai().isBlank())) {
     			erro += "Mensagem filha precisa ter inputPai \n";
@@ -139,5 +132,12 @@ public class MensagemService {
 				.idMensagemPai(mensagemDTO.getIdMensagemPai())
 				.idSetor(mensagemDTO.getIdSetor())
 				.conteudo("Input inválido").build();
+	}
+
+	private void concatenarInputsValidosNaMensagem(Mensagem mensagem,long idSetor, long idMensagem){
+		List<String> inputsValidos = this.obterInputsValidos(idSetor, idMensagem);
+		for(String input : inputsValidos){
+			mensagem.setConteudo(mensagem.getConteudo() + " \n " + input);
+		}
 	}
 }
