@@ -4,13 +4,13 @@ import java.util.ArrayList;
 
 import org.springframework.data.jpa.domain.Specification;
 
-import Senac.TCS.model.dto.MensagemDTO;
+import Senac.TCS.model.dto.MensagemRecebidaDTO;
 import Senac.TCS.model.entity.Mensagem;
 import jakarta.persistence.criteria.Predicate;
 
 public class MensagemSpecification {
 
-	public static Specification<Mensagem> proximaMensagem(MensagemDTO mensagemDto){
+	public static Specification<Mensagem> proximaMensagem(MensagemRecebidaDTO mensagemDto){
 		return (root, query, cb) -> {
 			ArrayList<Predicate> predicates = new ArrayList();
 
@@ -23,7 +23,7 @@ public class MensagemSpecification {
 		};
 	}
 
-	public static Specification<Mensagem> mensagemRoot(MensagemDTO mensagemDto){
+	public static Specification<Mensagem> mensagemRoot(MensagemRecebidaDTO mensagemDto){
 		return (root, query, cb) -> {
 			ArrayList<Predicate> predicates = new ArrayList();
 

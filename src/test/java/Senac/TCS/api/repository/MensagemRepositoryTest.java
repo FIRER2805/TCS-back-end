@@ -1,12 +1,16 @@
 package Senac.TCS.api.repository;
 
 import Senac.TCS.model.entity.Mensagem;
+import Senac.TCS.model.repository.MensagemJdbcRepository;
 import Senac.TCS.model.repository.MensagemRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+
+import java.util.List;
+import java.util.Optional;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
@@ -25,6 +29,8 @@ public class MensagemRepositoryTest {
 
         Assertions.assertNotNull(mensagemRaizRetornada);
         Assertions.assertEquals(mensagemRaizRetornada.getId(), 1);
+
+        System.out.println(mensagemRaizRetornada.getId());
 
     }
 

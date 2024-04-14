@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import Senac.TCS.exception.MensagemInvalidaException;
-import Senac.TCS.model.dto.MensagemDTO;
+import Senac.TCS.model.dto.MensagemRecebidaDTO;
 import Senac.TCS.model.dto.MensagemHistoricoDto;
 import Senac.TCS.model.entity.Contato;
 import Senac.TCS.model.entity.MensagemHistorico;
@@ -33,7 +33,7 @@ public class MensagemHistoricoService {
     	return mensagemHistoricoRepository.findById(id).orElse(null);
     }
     
-    public LocalDateTime obterTempoUltimaMensagemRecebidaPorContato(MensagemDTO mensagemDto) {
+    public LocalDateTime obterTempoUltimaMensagemRecebidaPorContato(MensagemRecebidaDTO mensagemDto) {
     	Contato contato = contatoService.obterContatoPorNumero(mensagemDto.getNumeroContato());
     	LocalDateTime dataRetornada = mensagemHistoricoRepository.obterDataUltimaMensagem(contato.getId(),mensagemDto.getIdUsuario());
     	return dataRetornada;

@@ -10,7 +10,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import Senac.TCS.exception.MensagemInvalidaException;
-import Senac.TCS.model.dto.MensagemDTO;
+import Senac.TCS.model.dto.MensagemRecebidaDTO;
 import Senac.TCS.model.entity.Mensagem;
 import Senac.TCS.model.repository.MensagemRepository;
 import Senac.TCS.model.specification.MensagemSpecification;
@@ -34,7 +34,7 @@ public class MensagemService {
     	return mensagemRepository.findById(id).orElse(null);
     }
     
-    public Mensagem obterProximaMensagem(MensagemDTO mensagemDTO) {
+    public Mensagem obterProximaMensagem(MensagemRecebidaDTO mensagemDTO) {
 		Specification<Mensagem> query;
 		long minutosUltimaInteracao = this.tempoUltimaMensagemEmMinutos(mensagemDTO);
 		if(minutosUltimaInteracao > TEMPO_RESET_CONVERSA || mensagemDTO.getIdMensagemPai() == null) {
@@ -118,7 +118,7 @@ public class MensagemService {
 		return erro;
 	}
 
-	private Long tempoUltimaMensagemEmMinutos(MensagemDTO mensagemDTO){
+	private Long tempoUltimaMensagemEmMinutos(MensagemRecebidaDTO mensagemDTO){
 		Long retorno = null;
 		if(contatoService.obterContatoPorNumero(mensagemDTO.getNumeroContato()) != null){
 			LocalDateTime tempoUltimaMensagem = mensagemHistoricoService.obterTempoUltimaMensagemRecebidaPorContato(mensagemDTO);
@@ -127,7 +127,7 @@ public class MensagemService {
 		return retorno;
 	}
 
-	private Mensagem mensagemErro(MensagemDTO mensagemDTO){
+	private Mensagem mensagemErro(MensagemRecebidaDTO mensagemDTO){
 		return Mensagem.builder()
 				.idMensagemPai(mensagemDTO.getIdMensagemPai())
 				.idSetor(mensagemDTO.getIdSetor())

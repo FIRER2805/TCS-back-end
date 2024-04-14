@@ -1,12 +1,7 @@
 package Senac.TCS.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
-import Senac.TCS.model.dto.MensagemDTO;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.List;
 
 @Getter
 @Setter

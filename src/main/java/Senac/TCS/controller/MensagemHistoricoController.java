@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import Senac.TCS.exception.MensagemInvalidaException;
-import Senac.TCS.model.dto.MensagemDTO;
+import Senac.TCS.model.dto.MensagemRecebidaDTO;
 import Senac.TCS.model.dto.MensagemHistoricoDto;
 import Senac.TCS.model.entity.MensagemHistorico;
 import Senac.TCS.service.MensagemHistoricoService;
@@ -48,7 +48,7 @@ public class MensagemHistoricoController {
     
     // teste
     @PostMapping("/tempoUltimaMensagem")
-    public ResponseEntity<LocalDateTime> obterTempoUltimaMensagemRecebida(@RequestBody MensagemDTO mensagemDto){
+    public ResponseEntity<LocalDateTime> obterTempoUltimaMensagemRecebida(@RequestBody MensagemRecebidaDTO mensagemDto){
     	LocalDateTime retorno = this.mensagemHistoricoService.obterTempoUltimaMensagemRecebidaPorContato(mensagemDto);
     	System.out.println(retorno);
     	return new ResponseEntity<>(retorno, HttpStatus.OK);
