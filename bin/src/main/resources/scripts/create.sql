@@ -26,26 +26,30 @@ CREATE TABLE usuario_setor (
 
 create table contato(
 	id BIGINT not null auto_increment primary key
-	,id_usuario BIGINT
-	,nome varchar(255)
-	,numero char(15) unique
+	,id_usuario BIGINT not null
+	,nome varchar(255) not null
+	,numero char(11) unique
 	,foreign key (id_usuario) references usuario(id)
 );
 
 CREATE TABLE mensagem (
     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     conteudo VARCHAR(255) NOT NULL,
-    input_pai varchar(255),
-    id_mensagem_pai BIGINT,
-    FOREIGN KEY (id_mensagem_pai) references mensagem(id),
     id_setor BIGINT null,
     FOREIGN KEY (id_setor) references setor(id)
 );
 
-CREATE TABLE mensagem_historico(
+CREATE TABLE `input`(
 	id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	conteudo VARCHAR(255) NOT NULL,
-	data_envio DATETIME NOT NULL,
-	id_contato BIGINT NOT NULL,
-	FOREIGN KEY (id_contato) references contato(id)
-);
+)
+
+CREATE TABLE mensagem_input(
+	id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	id_mensagem_pai BIGINT null,
+	id_mensagem_filha BIGINT null,
+	id_input BIGINT null,
+	FOREIGN KEY (id_mensagem_pai) references mensagem(id),
+	FOREIGN KEY (id_mensagem_filha) references mensagem(id),
+	FOREIGN KEY (id_input) references input(id)
+)
