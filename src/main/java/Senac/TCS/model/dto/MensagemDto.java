@@ -11,9 +11,9 @@ import java.util.List;
 @Setter
 public class MensagemDto {
 
-    private Long id;
-    private String conteudo;
+    private Long key;
+    private String label;
     private Long idSetor;
     private String inputPai;
-    private List<MensagemDto> mensagensFilhas;
+    private List<MensagemDto> children;
 }

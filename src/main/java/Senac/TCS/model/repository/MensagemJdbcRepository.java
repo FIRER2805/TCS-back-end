@@ -1,7 +1,6 @@
 package Senac.TCS.model.repository;
 
 import Senac.TCS.model.dto.MensagemDto;
-import Senac.TCS.model.entity.Mensagem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -20,10 +19,10 @@ public class MensagemJdbcRepository {
 
         RowMapper<MensagemDto> rowMapper = (rs, row) -> {
             MensagemDto mensagem = MensagemDto.builder()
-                    .id(rs.getLong(1))
-                    .conteudo(rs.getString(2))
+                    .key(rs.getLong(1))
+                    .label(rs.getString(2))
                     .inputPai(rs.getString(3))
-                    .mensagensFilhas(this.obterMensagensFilhas(rs.getLong(1)))
+                    .children(this.obterMensagensFilhas(rs.getLong(1)))
                     .idSetor(idSetor)
                     .build();
             return mensagem;
@@ -37,10 +36,10 @@ public class MensagemJdbcRepository {
 
         RowMapper<MensagemDto> rowMapper = (rs, row) -> {
             MensagemDto mensagem = MensagemDto.builder()
-                    .id(rs.getLong(1))
-                    .conteudo(rs.getString(2))
+                    .key(rs.getLong(1))
+                    .label(rs.getString(2))
                     .inputPai(rs.getString(3))
-                    .mensagensFilhas(this.obterMensagensFilhas(rs.getLong(1)))
+                    .children(this.obterMensagensFilhas(rs.getLong(1)))
                     .idSetor(rs.getLong(4))
                     .build();
             return mensagem;
