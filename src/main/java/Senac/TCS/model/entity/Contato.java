@@ -11,11 +11,12 @@ import jakarta.persistence.Table;
 @Table(name = "contato")
 public class Contato {
 
-	public Contato(Long id, String nome, String numero) {
+	public Contato(Long id, String nome, String numero,Boolean automatizado ) {
 		super();
 		this.id = id;
 		this.nome = nome;
 		this.numero = numero;
+		this.automatizado = automatizado;
 	}
 
 	public Contato() {
@@ -34,6 +35,9 @@ public class Contato {
 
 	@Column(name = "numero", unique = true, nullable = false)
 	private String numero;
+	
+	@Column(name = "automatizado")
+	private Boolean automatizado;
 
 	public Long getId() {
 		return id;
