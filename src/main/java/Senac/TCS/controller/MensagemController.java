@@ -1,10 +1,10 @@
 package Senac.TCS.controller;
 
 import Senac.TCS.exception.MensagemInvalidaException;
+import Senac.TCS.model.dto.GrafoMensagemDto;
 import Senac.TCS.model.dto.MensagemDto;
 import Senac.TCS.model.dto.MensagemRecebidaDTO;
 import Senac.TCS.model.entity.Mensagem;
-import Senac.TCS.model.repository.MensagemJdbcRepository;
 import Senac.TCS.service.MensagemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,9 +20,6 @@ public class MensagemController {
 
     @Autowired
     private MensagemService mensagemService;
-
-    @Autowired
-    private MensagemJdbcRepository mensagemJdbcRepository;
 
     @GetMapping
     public ResponseEntity<List<Mensagem>> ObterTodasMensagens() {
@@ -45,14 +42,14 @@ public class MensagemController {
     	}
     }
 
-    @GetMapping("/arvore")
-    public ResponseEntity<MensagemDto> obterArvoreMensage(){
-        return new ResponseEntity<>(this.mensagemJdbcRepository.obterArvoreMensagem(1l), HttpStatus.OK);
+    @GetMapping("/grafo/{idSetor}")
+    public ResponseEntity<GrafoMensagemDto> obterGrafoMensagem(@PathVariable Long idSetor){
+        return new ResponseEntity<>(this.mensagemService.obterGrafoMensagem(idSetor), HttpStatus.OK);
     }
 
     @PostMapping("/proximo")
-    public ResponseEntity<Mensagem> obterProximaMensagem(@RequestBody MensagemRecebidaDTO mensagemDto){
-        return new ResponseEntity<Mensagem>(mensagemService.obterProximaMensagem(mensagemDto), HttpStatus.OK);
+    public ResponseEntity<MensagemDto> obterProximaMensagem(@RequestBody MensagemRecebidaDTO mensagemRecebida){
+        return new ResponseEntity<MensagemDto>(mensagemService.obterProximaMensagem(mensagemRecebida), HttpStatus.OK);
     }
 
 

@@ -12,12 +12,25 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface MensagemRepository extends CrudRepository<Mensagem,Long>, JpaSpecificationExecutor<Mensagem> {
-	public boolean existsByInputPai(String input);
+public interface MensagemRepository extends CrudRepository<Mensagem,Long> {
+	public List<Mensagem> findByIdSetor(Long idSetor);
 
-	@Query(value="select m.input_pai " +
-			"from mensagem m " +
-			"where id_setor = ?1 AND id_mensagem_pai = ?2 ; "
-			, nativeQuery = true)
-	public List<String> obterInputsValidos(Long idSetor, Long idMensagemPai);
+	@Query(value = " select m.* from mensagem m " +
+			" join input i on " +
+			" i.id_mensagem_pai = m.id " +
+			" where not exists( " +
+			" select 1 " +
+			"    from input i2 " +
+			" where i2.id_mensagem_filha = m.id) " +
+			" AND id_setor = ?1 ; ", nativeQuery = true)
+	public Mensagem obterMensagemRoot(Long idSetor);
+
+	@Query(value = " select m.* from mensagem m " +
+			" join input i on " +
+			" i.id_mensagem_filha = m.id " +
+			" where i.conteudo like ?1 " +
+			" AND i.id_mensagem_pai = ?2 " +
+			" AND id_setor = ?3 ; ", nativeQuery = true)
+	public Mensagem obterMensagemFilha(String conteudo, Long idMensagemPai, Long idSetor);
+
 }
