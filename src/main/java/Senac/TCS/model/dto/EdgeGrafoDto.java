@@ -11,14 +11,14 @@ import lombok.*;
 public class EdgeGrafoDto {
 
     public EdgeGrafoDto(Input input){
-        this.id = input.getId();
+        this.id = String.valueOf(input.getId());
         this.label = input.getConteudo();
-        this.source = input.getIdMensagemPai();
-        this.target = input.getIdMensagemFilha();
+        this.source = String.valueOf(input.getIdMensagemPai());
+        this.target = String.valueOf(input.getIdMensagemFilha());
     }
 
-    private Long id;
+    private String id;
     private String label;
-    private Long source;
-    private Long target;
+    private String source;
+    private String target;
 }

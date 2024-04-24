@@ -11,12 +11,12 @@ import lombok.*;
 public class NodeGrafoDto {
 
     public NodeGrafoDto(Mensagem mensagem){
-        this.id = mensagem.getId();
+        this.id = String.valueOf(mensagem.getId());
         this.label = mensagem.getConteudo();
         this.idSetor = mensagem.getIdSetor();
     }
 
-    private Long id;
+    private String id;
     private String label;
     private Long idSetor;
 }
