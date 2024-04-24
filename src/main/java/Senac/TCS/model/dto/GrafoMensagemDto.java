@@ -12,6 +12,6 @@ import java.util.List;
 @Getter
 @Setter
 public class GrafoMensagemDto {
-    private List<Mensagem> mensagens;
-    private List<Input> inputs;
+    private List<NodeGrafoDto> nodes;
+    private List<EdgeGrafoDto> edges;
 }

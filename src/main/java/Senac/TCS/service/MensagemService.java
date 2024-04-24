@@ -2,17 +2,16 @@ package Senac.TCS.service;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
-import Senac.TCS.model.dto.GrafoMensagemDto;
-import Senac.TCS.model.dto.MensagemDto;
+import Senac.TCS.model.dto.*;
 import Senac.TCS.model.entity.Input;
 import Senac.TCS.model.repository.InputRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import Senac.TCS.exception.MensagemInvalidaException;
-import Senac.TCS.model.dto.MensagemRecebidaDTO;
 import Senac.TCS.model.entity.Mensagem;
 import Senac.TCS.model.repository.MensagemRepository;
 
@@ -40,9 +39,11 @@ public class MensagemService {
 	public GrafoMensagemDto obterGrafoMensagem(Long idSetor){
 		List<Mensagem> mensagens = this.mensagemRepository.findByIdSetor(idSetor);
 		List<Input> inputs = this.inputRepository.obterInputsPorIdSetor(idSetor);
+		List<NodeGrafoDto> nodes = this.mensagensParaNodeGrafoDto(mensagens);
+		List<EdgeGrafoDto> edges = this.inputsParaEdgeGrafoDto(inputs);
 		GrafoMensagemDto grafoMensagemDto = GrafoMensagemDto.builder()
-				.mensagens(mensagens)
-				.inputs(inputs)
+				.nodes(nodes)
+				.edges(edges)
 				.build();
 		return grafoMensagemDto;
 	}
@@ -128,5 +129,23 @@ public class MensagemService {
 			retorno = ChronoUnit.MINUTES.between(tempoUltimaMensagem, LocalDateTime.now());
 		}
 		return retorno;
+	}
+
+	private List<NodeGrafoDto> mensagensParaNodeGrafoDto(List<Mensagem> mensagens){
+		List<NodeGrafoDto> nodes = new ArrayList<>();
+		for(Mensagem m: mensagens){
+			NodeGrafoDto node = new NodeGrafoDto(m);
+			nodes.add(node);
+		}
+		return nodes;
+	}
+
+	private List<EdgeGrafoDto> inputsParaEdgeGrafoDto(List<Input> inputs){
+		List<EdgeGrafoDto> edges = new ArrayList<>();
+		for(Input i: inputs){
+			EdgeGrafoDto edge = new EdgeGrafoDto(i);
+			edges.add(edge);
+		}
+		return edges;
 	}
 }
