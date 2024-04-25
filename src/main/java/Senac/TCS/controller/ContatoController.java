@@ -34,7 +34,7 @@ public class ContatoController {
 	}
 
 	@PostMapping
-	public Contato criarContato(@RequestBody Contato contato) {
+	public Contato criarContato(@RequestBody Contato contato ) {
 		return contatoService.criarContato(contato);
 	}
 
@@ -49,20 +49,25 @@ public class ContatoController {
 
 	@DeleteMapping("/{id}")
 	public void deletarContato(@PathVariable Long id) {
-		contatoService.deletarContato(id);
+		try {
+			contatoService.deletarContato(id);
+		} catch (ContatoException e) {
+			e.getMessage();
+		}
 	}
 
 	@PutMapping("/{id}")
 	public Contato atualizarContato(@PathVariable Long id, @RequestBody Contato contato) {
 		return contatoService.atualizarContato(id, contato);
 	}
+	
 	@GetMapping("/existencia/{numero}")
     public ResponseEntity<String> verificarExistencia(@PathVariable String numero) {
         try {
             contatoService.existencia(numero);
             return ResponseEntity.ok("Contato com o número " + numero + " encontrado.");
         } catch (ContatoException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage()+ "Aleluia");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 	

@@ -17,12 +17,15 @@ public class ContatoService {
 	private ContatoRepository contatoRepository;
 
 	public Contato criarContato(Contato contato) {
+		
 	    String numero = contato.getNumero();
 	    String numeroCorrigido = corrigirNumero(numero);
 	    contato.setNumero(numeroCorrigido);
-	    return contatoRepository.save(contato);
+	    if(!contatoRepository.existsByNumero(numeroCorrigido)) {
+	    contato = contatoRepository.save(contato);	
+	    }
+	    return contato;
 	}
-
 	private String corrigirNumero(String numero) {
 	    String target = "@c.us";
 	    String replacement = "";
@@ -34,16 +37,21 @@ public class ContatoService {
 	}
 
 	public Contato atualizarContato(Long id, Contato novoContato) {
+		Contato cont = new Contato(); 
 		if (contatoRepository.existsById(id)) {
 			novoContato.setId(id);
-			return contatoRepository.save(novoContato);
+			cont = contatoRepository.save(novoContato);
 		}
-		// Criar excepition para não voltar nulo
-		return null;
+		return cont;
 	}
 
-	public void deletarContato(Long id) {
-		contatoRepository.deleteById(id);
+	public void deletarContato(Long id) throws ContatoException {
+		if(contatoRepository.existsById(id)) {
+			contatoRepository.deleteById(id);
+		}else{
+			 throw new ContatoException("Contato com o id '" + id + "' não encontrado.");
+		}
+		
 
 	}
 
