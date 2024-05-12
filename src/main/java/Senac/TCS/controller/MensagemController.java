@@ -4,6 +4,7 @@ import Senac.TCS.exception.MensagemInvalidaException;
 import Senac.TCS.model.dto.GrafoMensagemDto;
 import Senac.TCS.model.dto.MensagemDto;
 import Senac.TCS.model.dto.MensagemRecebidaDTO;
+import Senac.TCS.model.dto.MensagemSalvarDto;
 import Senac.TCS.model.entity.Mensagem;
 import Senac.TCS.service.MensagemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class MensagemController {
     }
 
     @PostMapping
-    public ResponseEntity<Mensagem> criarMensagem(@RequestBody Mensagem mensagem) {
+    public ResponseEntity<Mensagem> criarMensagem(@RequestBody MensagemSalvarDto mensagem) {
     	try{
     		Mensagem mensagemSalva = mensagemService.criarMensagem(mensagem);
     		return new ResponseEntity<>(mensagemSalva, HttpStatus.OK);
@@ -53,10 +54,10 @@ public class MensagemController {
     }
 
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Mensagem> atualizarMensagem(@PathVariable Long id, @RequestBody Mensagem mensagem) {
+    @PutMapping()
+    public ResponseEntity<Mensagem> atualizarMensagem(@RequestBody Mensagem mensagem) {
         try{
-            Mensagem mensagemSalva = mensagemService.atualizarMensagem(id,mensagem);
+            Mensagem mensagemSalva = mensagemService.atualizarMensagem(mensagem);
             return new ResponseEntity<>(mensagemSalva, HttpStatus.OK);
         }
         catch(MensagemInvalidaException e) {
@@ -64,9 +65,9 @@ public class MensagemController {
         }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarMensagem(@PathVariable Long id) {
-        mensagemService.deletarMensagem(id);
+    @PostMapping("/delete")
+    public ResponseEntity<Void> deletarMensagem(@RequestBody Mensagem mensagem) {
+        mensagemService.deletarMensagem(mensagem);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

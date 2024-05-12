@@ -1,6 +1,6 @@
-drop database if exists tcs_teste;
-create database tcs_teste;
-use tcs_teste;
+drop database if exists tcs;
+create database tcs;
+use tcs;
 
 CREATE TABLE usuario (
     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -44,8 +44,8 @@ create table input(
     conteudo varchar(50),
     id_mensagem_pai bigint,
     id_mensagem_filha bigint,
-    foreign key(id_mensagem_pai) references mensagem(id),
-    foreign key(id_mensagem_filha) references mensagem(id)
+    foreign key(id_mensagem_pai) references mensagem(id) on delete cascade,
+    foreign key(id_mensagem_filha) references mensagem(id) on delete set null
 );
 
 CREATE TABLE mensagem_historico(

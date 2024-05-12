@@ -27,6 +27,8 @@ public class MensagemService {
     private MensagemHistoricoService mensagemHistoricoService;
 	@Autowired
 	private ContatoService contatoService;
+	@Autowired
+	private InputService inputService;
 
     public List<Mensagem> listarTodasMensagens() {
         return (List<Mensagem>) mensagemRepository.findAll();
@@ -79,28 +81,46 @@ public class MensagemService {
 		return retorno;
     }
 
-    public Mensagem criarMensagem(Mensagem mensagem) throws MensagemInvalidaException {
+    public Mensagem criarMensagem(MensagemSalvarDto mensagem) throws MensagemInvalidaException {
     	String erro = this.validarMensagem(mensagem);
     	if(!erro.isEmpty()) {
     		throw new MensagemInvalidaException(erro);
     	}
-        return mensagemRepository.save(mensagem);
+		Mensagem novaMensagem = Mensagem.builder()
+				.idSetor(mensagem.getIdSetor())
+				.conteudo(mensagem.getConteudo())
+				.build();
+        Mensagem mensagemSalva = mensagemRepository.save(novaMensagem);
+
+		Input inputSalvo = inputService.salvarInput(mensagemSalva, mensagem.getInputPai());
+		// TODO tratamento de erros
+		return mensagemSalva;
     }
 
-    public Mensagem atualizarMensagem(Long id, Mensagem mensagem) throws MensagemInvalidaException {
-		String erro = this.validarMensagem(id,mensagem);
-		if(!erro.isEmpty()){
-			throw new MensagemInvalidaException(erro);
-		}
-		mensagem.setId(id);
+    public Mensagem atualizarMensagem(Mensagem mensagem) throws MensagemInvalidaException {
+//		String erro = this.validarMensagem(id,mensagem);
+//		if(!erro.isEmpty()){
+//			throw new MensagemInvalidaException(erro);
+//		}
 		return mensagemRepository.save(mensagem);
     }
 
-    public void deletarMensagem(Long id) {
-        mensagemRepository.deleteById(id);
+    public void deletarMensagem(Mensagem m) {
+		deletarMensagemCascata(m);
+		inputRepository.deleteByIdMensagemFilha(null);
     }
+
+	public void deletarMensagemCascata(Mensagem m){
+		List<Input> inputsFilhas = this.inputRepository.obterInputsValidosDeMensagem(m.getId(), m.getIdSetor());
+		for(Input i: inputsFilhas){
+			Mensagem mensagemFilha = this.mensagemRepository.findById(i.getIdMensagemFilha()).get();
+			deletarMensagemCascata(mensagemFilha);
+			this.inputRepository.delete(i);
+		}
+		mensagemRepository.deleteById(m.getId());
+	}
     
-    private String validarMensagem(Mensagem mensagem) {
+    private String validarMensagem(MensagemSalvarDto mensagem) {
     	String erro = "";
     	if(mensagem == null) {
     		erro = "Não há nenhuma mensagem";
@@ -113,14 +133,14 @@ public class MensagemService {
     	return erro;
     }
 
-	private String validarMensagem(Long id, Mensagem mensagem){
-		String erro = "";
-		if(id == null){
-			erro += "É necessario colocar id para atualizar a mensagem \n";
-		}
-		erro += this.validarMensagem(mensagem);
-		return erro;
-	}
+//	private String validarMensagem(Long id, Mensagem mensagem){
+//		String erro = "";
+//		if(id == null){
+//			erro += "É necessario colocar id para atualizar a mensagem \n";
+//		}
+//		erro += this.validarMensagem(mensagem);
+//		return erro;
+//	}
 
 	private Long tempoUltimaMensagemEmMinutos(MensagemRecebidaDTO mensagemRecebida){
 		Long retorno = null;
