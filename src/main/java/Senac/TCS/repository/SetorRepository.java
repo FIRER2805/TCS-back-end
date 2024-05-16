@@ -8,5 +8,7 @@ import Senac.TCS.entities.Setor;
 
 @Repository
 public interface SetorRepository extends JpaRepository<Setor, Long>, JpaSpecificationExecutor<Setor> {
+	
+	//criar uma query para buscar o setor de um usuário com specification ou @query
 
 }

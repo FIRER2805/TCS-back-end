@@ -19,13 +19,15 @@ public class SetorService {
 		return setorRepository.findAll();
 	}
 
-	public Setor inserir(Setor novoFabricante) throws CampoInvalidoException {
-		validarCamposObrigatorios(novoFabricante);
-		return setorRepository.save(novoFabricante);
+	public Setor inserir(Setor novoSetor) throws CampoInvalidoException {
+		validarCamposObrigatorios(novoSetor);
+		
+		return setorRepository.save(novoSetor);
 	}
 
 	public Setor atualizar(Setor novoSetor) throws CampoInvalidoException {
 		validarCamposObrigatorios(novoSetor);
+		//fazer uma validacao para verificar se tem id antes de atualizar
 		return setorRepository.save(novoSetor);
 	}
 

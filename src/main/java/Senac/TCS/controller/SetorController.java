@@ -18,7 +18,7 @@ import Senac.TCS.exception.CampoInvalidoException;
 import Setor.TCS.service.SetorService;
 
 @RestController
-@RequestMapping(path = "/api/setores")
+@RequestMapping(path = "/setores")
 @CrossOrigin(origins = { "http://localhost:4200"}, maxAge = 3600)
 
 public class SetorController {
@@ -26,8 +26,7 @@ public class SetorController {
 	@Autowired
 	private SetorService service;
 	
- /// ola
-	
+
 	@GetMapping
 	public List<Setor> listarTodos() {
 		List<Setor> setores = service.listarTodos();
@@ -35,10 +34,14 @@ public class SetorController {
 	}
 	
 	@PostMapping
-	public Setor salvar(@RequestBody Setor novo) 
-			throws CampoInvalidoException {
-		
-		return service.inserir(novo);
+	public Setor salvar(@RequestBody Setor novo) {
+		try {
+			return service.inserir(novo);
+		} catch (CampoInvalidoException e) {
+			//valida se o campo esta invalido
+			e.printStackTrace();
+		}
+		return novo;
 	}
 	
 	@GetMapping("/{id}")
