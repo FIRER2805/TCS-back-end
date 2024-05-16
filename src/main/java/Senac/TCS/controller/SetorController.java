@@ -26,6 +26,8 @@ public class SetorController {
 	@Autowired
 	private SetorService service;
 	
+ /// ola
+	
 	@GetMapping
 	public List<Setor> listarTodos() {
 		List<Setor> setores = service.listarTodos();
