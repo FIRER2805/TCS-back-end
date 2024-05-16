@@ -1,4 +1,4 @@
-package controller;
+package Senac.TCS.controller;
 
 import java.util.List;
 
@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import entities.Setor;
-import exception.CampoInvalidoException;
-import service.SetorService;
+import Senac.TCS.entities.Setor;
+import Senac.TCS.exception.CampoInvalidoException;
+import Setor.TCS.service.SetorService;
 
 @RestController
 @RequestMapping(path = "/api/setores")
-@CrossOrigin(origins = { "http://localhost:4200", "http://127.0.0.1:5500" }, maxAge = 3600)
+@CrossOrigin(origins = { "http://localhost:4200"}, maxAge = 3600)
 
 public class SetorController {
 	

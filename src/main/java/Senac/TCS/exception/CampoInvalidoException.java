@@ -1,4 +1,4 @@
-package exception;
+package Senac.TCS.exception;
 
 public class CampoInvalidoException extends Exception{
 

@@ -1,13 +1,13 @@
-package service;
+package Setor.TCS.service;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import entities.Setor;
-import exception.CampoInvalidoException;
-import repository.SetorRepository;
+import Senac.TCS.entities.Setor;
+import Senac.TCS.exception.CampoInvalidoException;
+import Senac.TCS.repository.SetorRepository;
 
 @Service
 public class SetorService {

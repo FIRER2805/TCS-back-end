@@ -1,4 +1,4 @@
-package entities;
+package Senac.TCS.entities;
 
 import java.util.ArrayList;
 
