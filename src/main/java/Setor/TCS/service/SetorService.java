@@ -20,8 +20,7 @@ public class SetorService {
 	}
 
 	public Setor inserir(Setor novoSetor) throws CampoInvalidoException {
-		validarCamposObrigatorios(novoSetor);
-		
+		validarCamposObrigatorios(novoSetor); 
 		return setorRepository.save(novoSetor);
 	}
 
@@ -47,15 +46,15 @@ public class SetorService {
 		return "";
 	}
 
-	private void validarCamposObrigatorios(Setor setor) throws CampoInvalidoException {
+	private void validarCamposObrigatorios(Setor novoSetor) throws CampoInvalidoException {
 		String mensagemValidacao = "";
-		mensagemValidacao += validarCampoString(setor.getNome(), "nome");
-		mensagemValidacao += validarCampoString(setor.getDescricao(), "descricao");
-	//	mensagemValidacao += validarCampoString(setor.getUsuarios(), "usuarios");
-		mensagemValidacao += validarCampoString(setor.getNome(), "nome");
-
+		mensagemValidacao += validarCampoString(novoSetor.getNome(), "nome");
+		mensagemValidacao += validarCampoString(novoSetor.getDescricao(), "descricao");
 		if (!mensagemValidacao.isEmpty()) {
 			throw new CampoInvalidoException(mensagemValidacao);
 		}
 	}
+
+	
+	
 }
