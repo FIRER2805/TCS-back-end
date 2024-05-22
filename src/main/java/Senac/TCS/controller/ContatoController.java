@@ -32,6 +32,11 @@ public class ContatoController {
 	public List<Contato> listarContatos() {
 		return contatoService.listarContatos();
 	}
+	
+	@GetMapping
+	public List<Contato> contatoMensagemRec() {
+		return contatoService.contatoMensagemRec();
+	}
 
 	@PostMapping
 	public Contato criarContato(@RequestBody Contato contato ) {

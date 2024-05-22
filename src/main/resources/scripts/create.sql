@@ -1,6 +1,6 @@
-DROP DATABASE IF EXISTS TCS;
-CREATE DATABASE TCS;
-USE TCS;
+drop database if exists tcs;
+create database tcs;
+use tcs;
 
 CREATE TABLE usuario (
     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -26,26 +26,32 @@ CREATE TABLE usuario_setor (
 
 create table contato(
 	id BIGINT not null auto_increment primary key
-	,id_usuario BIGINT not null
-	,nome varchar(255) not null
-	,numero char(11) unique
-	,automatizado TINYINT NOT NULL DEFAULT 0
+	,id_usuario BIGINT
+	,nome varchar(255)
+	,numero char(30) unique
 	,foreign key (id_usuario) references usuario(id)
 );
 
-CREATE TABLE mensagem (
-    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    conteudo VARCHAR(255) NOT NULL,
-    input_pai varchar(255),
-    id_mensagem_pai BIGINT,
-    FOREIGN KEY (id_mensagem_pai) references mensagem(id),
-    id_setor BIGINT null,
-    FOREIGN KEY (id_setor) references setor(id)
+create table mensagem(
+	id bigint not null auto_increment primary key,
+    conteudo varchar(255) not null,
+    id_setor bigint not null,
+    foreign key(id_setor) references setor(id)
 );
 
-CREATE TABLE mensagem_contato(
+create table input(
+	id bigint not null auto_increment primary key,
+    conteudo varchar(50),
+    id_mensagem_pai bigint,
+    id_mensagem_filha bigint,
+    foreign key(id_mensagem_pai) references mensagem(id) on delete cascade,
+    foreign key(id_mensagem_filha) references mensagem(id) on delete set null
+);
+
+CREATE TABLE mensagem_historico(
 	id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	conteudo VARCHAR(255) NOT NULL,
+	data_envio DATETIME NOT NULL,
 	id_contato BIGINT NOT NULL,
 	FOREIGN KEY (id_contato) references contato(id)
 );

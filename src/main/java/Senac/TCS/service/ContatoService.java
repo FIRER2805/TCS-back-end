@@ -52,9 +52,12 @@ public class ContatoService {
 			 throw new ContatoException("Contato com o id '" + id + "' não encontrado.");
 		}
 		
-
 	}
-
+	
+	public List<Contato> contatoMensagemRec() {
+		return contatoRepository.findContatoByMensagemMaisRecente();
+	}
+	
 	public List<Contato> listarContatos() {
 		return contatoRepository.findAll();
 	}
