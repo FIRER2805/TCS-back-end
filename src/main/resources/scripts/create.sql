@@ -26,9 +26,10 @@ CREATE TABLE usuario_setor (
 
 create table contato(
 	id BIGINT not null auto_increment primary key
-	,id_usuario BIGINT
-	,nome varchar(255)
-	,numero char(30) unique
+	,id_usuario BIGINT not null
+	,nome varchar(255) not null
+	,numero char(11) unique
+	,automatizado TINYINT NOT NULL DEFAULT 0
 	,foreign key (id_usuario) references usuario(id)
 );
 
