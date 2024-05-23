@@ -55,7 +55,7 @@ public class ContatoService {
 	}
 	
 	public List<Contato> contatoMensagemRec() {
-		return contatoRepository.findContatoByMensagemMaisRecente();
+		return contatoRepository.findContatoByMostRecentMessage();
 	}
 	
 	public List<Contato> listarContatos() {

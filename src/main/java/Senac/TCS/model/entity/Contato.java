@@ -41,9 +41,6 @@ public class Contato {
 	@Column(name = "automatizado")
 	private int automatizado;
 
-	@Column(name = "mostRecentMessage")
-	private int mostRecentMessage;
-
 	public Long getId() {
 		return id;
 	}

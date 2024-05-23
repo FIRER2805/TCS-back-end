@@ -1,7 +1,6 @@
 package Senac.TCS.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,25 +31,25 @@ public class ContatoController {
 	public List<Contato> listarContatos() {
 		return contatoService.listarContatos();
 	}
-	
-	@GetMapping
+
+	@GetMapping("/mensagem-recente")
 	public List<Contato> contatoMensagemRec() {
 		return contatoService.contatoMensagemRec();
 	}
 
 	@PostMapping
-	public Contato criarContato(@RequestBody Contato contato ) {
+	public Contato criarContato(@RequestBody Contato contato) {
 		return contatoService.criarContato(contato);
 	}
 
 	@GetMapping("/usuario/{idUsuario}")
-    public ResponseEntity<List<Contato>> buscarContatosPorUsuario(@PathVariable Long idUsuario) {
-        List<Contato> contatos = contatoService.findContatosByUsuario(idUsuario);
-        if (contatos.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(contatos);
-    }
+	public ResponseEntity<List<Contato>> buscarContatosPorUsuario(@PathVariable Long idUsuario) {
+		List<Contato> contatos = contatoService.findContatosByUsuario(idUsuario);
+		if (contatos.isEmpty()) {
+			return ResponseEntity.notFound().build();
+		}
+		return ResponseEntity.ok(contatos);
+	}
 
 	@DeleteMapping("/{id}")
 	public void deletarContato(@PathVariable Long id) {
@@ -65,15 +64,15 @@ public class ContatoController {
 	public Contato atualizarContato(@PathVariable Long id, @RequestBody Contato contato) {
 		return contatoService.atualizarContato(id, contato);
 	}
-	
+
 	@GetMapping("/existencia/{numero}")
-    public ResponseEntity<String> verificarExistencia(@PathVariable String numero) {
-        try {
-            contatoService.existencia(numero);
-            return ResponseEntity.ok("Contato com o número " + numero + " encontrado.");
-        } catch (ContatoException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }
-	
+	public ResponseEntity<String> verificarExistencia(@PathVariable String numero) {
+		try {
+			contatoService.existencia(numero);
+			return ResponseEntity.ok("Contato com o número " + numero + " encontrado.");
+		} catch (ContatoException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}
+	}
+
 }
