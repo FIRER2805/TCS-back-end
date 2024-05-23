@@ -2,14 +2,14 @@ package Senac.TCS.model.DTO;
 
 public class ContatoDTO {
 
-	
 	private Long id;
 	private Long idUsuario;
 	private String nome;
-	@jakarta.validation.constraints.Pattern(regexp = "^\\d{2}\\d{9}$", message = "O número de telefone deve ter 11 dígitos.")
+	// @jakarta.validation.constraints.Pattern(regexp = "^\\d{2}\\d{9}$", message =
+	// "O número de telefone deve ter 11 dígitos.")
 	private String numero;
+	private int automatizado;
 
-	
 	public Long getId() {
 		return id;
 	}
@@ -41,4 +41,13 @@ public class ContatoDTO {
 	public void setNumero(String numero) {
 		this.numero = numero;
 	}
+
+	public int getAutomatizado() {
+		return automatizado;
+	}
+
+	public void setAutomatizado(int automatizado) {
+		this.automatizado = automatizado;
+	}
+
 }
