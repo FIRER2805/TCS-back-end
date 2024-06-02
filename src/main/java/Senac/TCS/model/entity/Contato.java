@@ -1,6 +1,5 @@
 package Senac.TCS.model.entity;
 
-import Senac.TCS.model.DTO.ContatoDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,13 +11,13 @@ import jakarta.persistence.Table;
 @Table(name = "contato")
 public class Contato {
 
-	public Contato(ContatoDTO dto) {
+	public Contato(Long id, String nome, String numero, int automatizado, Long id_usuario ) {
 		super();
-		this.id = dto.getId();
-		this.nome = dto.getNome();
-		this.numero = dto.getNumero();
-		this.automatizado = dto.getAutomatizado();
-		this.usuario = dto.getIdUsuario();
+		this.id = id;
+		this.nome = nome;
+		this.numero = numero;
+		this.automatizado = automatizado;
+		this.usuario = id_usuario;
 	}
 
 	public Contato() {
