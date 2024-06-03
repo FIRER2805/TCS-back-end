@@ -59,7 +59,7 @@ public class ContatoService {
 	}
 	
 	public List<Contato> listarContatos() {
-		return contatoRepository.findAll();
+		return (List) contatoRepository.findAll();
 	}
 	public void existencia(String numero) throws ContatoException {
 	    if (!contatoRepository.existsByNumero(numero)) {
