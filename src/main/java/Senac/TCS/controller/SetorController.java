@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import Senac.TCS.entities.Setor;
 import Senac.TCS.exception.CampoInvalidoException;
+import Senac.TCS.seletor.SetorSeletor;
 import Setor.TCS.service.SetorService;
 
 @RestController
@@ -26,24 +27,22 @@ import Setor.TCS.service.SetorService;
 public class SetorController {
 
 	@Autowired
-	private SetorService service;
+	private SetorService service = new SetorService();
+	
+	@PostMapping("/seletor")
+	public List<Setor> consultarComFiltros(SetorSeletor seletor) {
+		return service.consultarComFiltros(seletor);
+	}
 
-	@GetMapping
+	@GetMapping("/listarTodos")
 	public List<Setor> listarTodos() {
 		List<Setor> setores = service.listarTodos();
 		return setores;
 	}
 
 	@PostMapping("/inserir")
-	public Setor inserir(@RequestBody Setor novoSetor) {
-		try {
-			return service.inserir(novoSetor);
-		} catch (CampoInvalidoException e) {
-			// valida se o campo esta invalido
-			e.printStackTrace();
-		}
-
-		return novoSetor;
+	public Setor inserir(@RequestBody Setor novoSetor) throws CampoInvalidoException {
+		return service.inserir(novoSetor);
 	}
 
 	@GetMapping("/{id}")
@@ -51,13 +50,13 @@ public class SetorController {
 		return service.consultarPorId(id.longValue());
 	}
 
-	@PutMapping
+	@PutMapping("/atualizar")
 	public boolean atualizar(@RequestBody Setor setorParaAtualizar) throws CampoInvalidoException {
 		return service.atualizar(setorParaAtualizar) != null;
 	}
-
+	
 	@DeleteMapping("/{id}")
-	public boolean excluir(@PathVariable Integer id) {
+	public boolean excluir(@PathVariable int id) {
 		return service.excluir(id);
 	}
 

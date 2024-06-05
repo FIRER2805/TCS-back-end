@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import Senac.TCS.entities.Setor;
 import Senac.TCS.exception.CampoInvalidoException;
 import Senac.TCS.repository.SetorRepository;
+import Senac.TCS.seletor.SetorSeletor;
+import java.util.stream.Collectors;
 
 @Service
 public class SetorService {
@@ -15,19 +17,53 @@ public class SetorService {
 	@Autowired
 	private SetorRepository setorRepository;
 
+	public List<Setor> consultarComFiltros(SetorSeletor seletor) {
+		List<Setor> setores = listarTodos();
+
+		if (seletor.temFiltro()) {
+			if (seletor.getNome() != null && !seletor.getNome().trim().isBlank()) {
+				setores = filtrarPorNomeSetor(setores, seletor.getNome());
+			}
+			if (seletor.getDescricao() != null && !seletor.getDescricao().trim().isBlank()) {
+				setores = filtrarPorDescricaoSetor(setores, seletor.getDescricao());
+			}
+
+		}
+
+		return setores;
+	}
+
+	private List<Setor> filtrarPorDescricaoSetor(List<Setor> setores, String descricao) {
+		return (List<Setor>) setores.stream().filter(setor -> setor.getDescricao().equals(descricao))
+				.collect(Collectors.toList());
+	}
+
+	private List<Setor> filtrarPorNomeSetor(List<Setor> setores, String nome) {
+		return (List<Setor>) setores.stream().filter(setor -> setor.getNome().equals(nome))
+				.collect(Collectors.toList());
+	}
+
 	public List<Setor> listarTodos() {
 		return setorRepository.findAll();
 	}
 
 	public Setor inserir(Setor novoSetor) throws CampoInvalidoException {
-		validarCamposObrigatorios(novoSetor); 
-		return setorRepository.save(novoSetor);
+		validarCamposObrigatorios(novoSetor);
+		if (novoSetor.getIdSetor() == null) {
+			return setorRepository.save(novoSetor);
+		} else {
+			throw new IllegalArgumentException("Não é possível inserir um setor com um ID já definido.");
+		}
 	}
 
 	public Setor atualizar(Setor novoSetor) throws CampoInvalidoException {
 		validarCamposObrigatorios(novoSetor);
-		//fazer uma validacao para verificar se tem id antes de atualizar
-		return setorRepository.save(novoSetor);
+		// fazer uma validacao para verificar se tem id antes de atualizar
+		if (novoSetor.getIdSetor() != null) {
+			return setorRepository.save(novoSetor);
+		} else {
+			throw new IllegalArgumentException("Não é possível atualizar um setor com um ID indefinido.");
+		}
 	}
 
 	public Setor consultarPorId(long id) {
@@ -55,6 +91,4 @@ public class SetorService {
 		}
 	}
 
-	
-	
 }
