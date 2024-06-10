@@ -51,30 +51,34 @@ public class MensagemService {
 	}
     
     public MensagemDto obterProximaMensagem(MensagemRecebidaDTO mensagemRecebida) {
+		System.out.println(mensagemRecebida.getIdMensagemPai());
 		long idSetor = mensagemRecebida.getIdSetor();
 		Mensagem mensagemEnviar;
-		long minutosUltimaInteracao = this.tempoUltimaMensagemEmMinutos(mensagemRecebida);
-		if(minutosUltimaInteracao > TEMPO_RESET_CONVERSA || mensagemRecebida.getIdMensagemPai() == null) {
+		Long minutosUltimaInteracao = this.tempoUltimaMensagemEmMinutos(mensagemRecebida);
+		// mostra mensagem root se tiver passado 5 minutos ou
+		// se for a primeira mensagem daquele contato para aquele ususario
+		if(minutosUltimaInteracao == null || minutosUltimaInteracao > TEMPO_RESET_CONVERSA || mensagemRecebida.getIdMensagemPai() == null) {
 			mensagemEnviar = this.mensagemRepository.obterMensagemRoot(idSetor);
 		}
 		else {
-			mensagemEnviar = this.mensagemRepository.obterMensagemFilha(mensagemRecebida.getConteudo(),
+			mensagemEnviar = this.mensagemRepository.obterMensagemFilha(mensagemRecebida.getInputPai(),
 					mensagemRecebida.getIdMensagemPai(), idSetor);
 		}
 
 		MensagemDto retorno;
 
-		if(mensagemEnviar != null){
+		// buscando os inputs aceitos
+		//o usuário enviou tudo certo
+		if(mensagemEnviar != null ){
 			List<Input> inputsValidos = this.inputRepository.obterInputsValidosDeMensagem(mensagemEnviar.getId(), idSetor);
 			retorno = new MensagemDto(mensagemEnviar, inputsValidos);
 		}
+		// o usuário enviou errado
 		else{
-			List<Input> inputsValidos = this.inputRepository.obterInputsValidosDeMensagem(mensagemRecebida.getIdMensagemPai(), idSetor);
 			retorno = MensagemDto.builder()
-					.id(mensagemRecebida.getId())
-					.conteudo("inputs inválidos")
-					.idSetor(idSetor)
-					.inputsFilhos(inputsValidos)
+					.id(mensagemRecebida.getIdMensagemPai())
+					.idSetor(mensagemRecebida.getIdSetor())
+					.conteudo("input incorreto")
 					.build();
 		}
 
