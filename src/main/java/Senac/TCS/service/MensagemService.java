@@ -75,10 +75,12 @@ public class MensagemService {
 		}
 		// o usuário enviou errado
 		else{
+			List<Input> inputsValidos = this.inputRepository.obterInputsValidosDeMensagem(mensagemRecebida.getIdMensagemPai(), idSetor);
 			retorno = MensagemDto.builder()
 					.id(mensagemRecebida.getIdMensagemPai())
 					.idSetor(mensagemRecebida.getIdSetor())
 					.conteudo("input incorreto")
+					.inputsFilhos(inputsValidos)
 					.build();
 		}
 
