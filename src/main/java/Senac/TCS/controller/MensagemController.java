@@ -53,8 +53,13 @@ public class MensagemController {
         return new ResponseEntity<MensagemDto>(mensagemService.obterProximaMensagem(mensagemRecebida), HttpStatus.OK);
     }
 
+    @PostMapping("/selecionarSetor")
+    public ResponseEntity selecionarSetor(@RequestBody MensagemRecebidaDTO mensagemRecebidaDTO){
+        return ResponseEntity.ok().body(mensagemService.selecionarSetor(mensagemRecebidaDTO));
+    }
 
-    @PutMapping()
+
+    @PutMapping
     public ResponseEntity<Mensagem> atualizarMensagem(@RequestBody Mensagem mensagem) {
         try{
             Mensagem mensagemSalva = mensagemService.atualizarMensagem(mensagem);

@@ -7,8 +7,11 @@ import java.util.List;
 
 import Senac.TCS.model.dto.*;
 import Senac.TCS.model.entity.Input;
+import Senac.TCS.model.entity.Setor;
 import Senac.TCS.model.repository.InputRepository;
+import Senac.TCS.model.repository.SetorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import Senac.TCS.exception.MensagemInvalidaException;
@@ -29,6 +32,8 @@ public class MensagemService {
 	private ContatoService contatoService;
 	@Autowired
 	private InputService inputService;
+	@Autowired
+	private SetorRepository setorRepository;
 
     public List<Mensagem> listarTodasMensagens() {
         return (List<Mensagem>) mensagemRepository.findAll();
@@ -173,5 +178,9 @@ public class MensagemService {
 			edges.add(edge);
 		}
 		return edges;
+	}
+
+	public List<Setor> selecionarSetor(MensagemRecebidaDTO mensagemRecebidaDTO) {
+		return this.setorRepository.obterSetoresDeUsuario(mensagemRecebidaDTO.getIdUsuario());
 	}
 }
