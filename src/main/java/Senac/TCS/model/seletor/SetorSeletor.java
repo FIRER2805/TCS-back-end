@@ -1,4 +1,4 @@
-package Senac.TCS.seletor;
+package Senac.TCS.model.seletor;
 
 public class SetorSeletor extends BaseSeletor {
 

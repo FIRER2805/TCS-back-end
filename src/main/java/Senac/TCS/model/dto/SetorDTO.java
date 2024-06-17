@@ -1,4 +1,4 @@
-package Senac.TCS.dto;
+package Senac.TCS.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,14 +1,14 @@
-package Setor.TCS.service;
+package Senac.TCS.service;
 
 import java.util.List;
 
+import Senac.TCS.model.entity.Setor;
+import Senac.TCS.model.repository.SetorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import Senac.TCS.entities.Setor;
 import Senac.TCS.exception.CampoInvalidoException;
-import Senac.TCS.repository.SetorRepository;
-import Senac.TCS.seletor.SetorSeletor;
+import Senac.TCS.model.seletor.SetorSeletor;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,12 +44,12 @@ public class SetorService {
 	}
 
 	public List<Setor> listarTodos() {
-		return setorRepository.findAll();
+		return (List) setorRepository.findAll();
 	}
 
 	public Setor inserir(Setor novoSetor) throws CampoInvalidoException {
 		validarCamposObrigatorios(novoSetor);
-		if (novoSetor.getIdSetor() == null) {
+		if (novoSetor.getId() == null) {
 			return setorRepository.save(novoSetor);
 		} else {
 			throw new IllegalArgumentException("Não é possível inserir um setor com um ID já definido.");
@@ -59,7 +59,7 @@ public class SetorService {
 	public Setor atualizar(Setor novoSetor) throws CampoInvalidoException {
 		validarCamposObrigatorios(novoSetor);
 		// fazer uma validacao para verificar se tem id antes de atualizar
-		if (novoSetor.getIdSetor() != null) {
+		if (novoSetor.getId() != null) {
 			return setorRepository.save(novoSetor);
 		} else {
 			throw new IllegalArgumentException("Não é possível atualizar um setor com um ID indefinido.");
