@@ -2,18 +2,21 @@ package Senac.TCS.service;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
+import Senac.TCS.model.dto.*;
+import Senac.TCS.model.entity.Input;
+import Senac.TCS.model.entity.Setor;
+import Senac.TCS.model.repository.InputRepository;
+import Senac.TCS.model.repository.SetorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import Senac.TCS.exception.MensagemInvalidaException;
-import Senac.TCS.model.dto.MensagemRecebidaDTO;
 import Senac.TCS.model.entity.Mensagem;
 import Senac.TCS.model.repository.MensagemRepository;
-import Senac.TCS.model.specification.MensagemSpecification;
 
 @Service
 public class MensagemService {
@@ -21,10 +24,16 @@ public class MensagemService {
 	final private int TEMPO_RESET_CONVERSA = 5;
     @Autowired
     private MensagemRepository mensagemRepository;
+	@Autowired
+	private InputRepository inputRepository;
     @Autowired
     private MensagemHistoricoService mensagemHistoricoService;
 	@Autowired
 	private ContatoService contatoService;
+	@Autowired
+	private InputService inputService;
+	@Autowired
+	private SetorRepository setorRepository;
 
     public List<Mensagem> listarTodasMensagens() {
         return (List<Mensagem>) mensagemRepository.findAll();
@@ -33,62 +42,96 @@ public class MensagemService {
     public Mensagem obterMensagemPorId(Long id) {
     	return mensagemRepository.findById(id).orElse(null);
     }
+
+	public GrafoMensagemDto obterGrafoMensagem(Long idSetor){
+		List<Mensagem> mensagens = this.mensagemRepository.findByIdSetor(idSetor);
+		List<Input> inputs = this.inputRepository.obterInputsPorIdSetor(idSetor);
+		List<NodeGrafoDto> nodes = this.mensagensParaNodeGrafoDto(mensagens);
+		List<EdgeGrafoDto> edges = this.inputsParaEdgeGrafoDto(inputs);
+		GrafoMensagemDto grafoMensagemDto = GrafoMensagemDto.builder()
+				.nodes(nodes)
+				.edges(edges)
+				.build();
+		return grafoMensagemDto;
+	}
     
-    public Mensagem obterProximaMensagem(MensagemRecebidaDTO mensagemDTO) {
-		Specification<Mensagem> query;
-		long minutosUltimaInteracao = this.tempoUltimaMensagemEmMinutos(mensagemDTO);
-		if(minutosUltimaInteracao > TEMPO_RESET_CONVERSA || mensagemDTO.getIdMensagemPai() == null) {
-			query = MensagemSpecification.mensagemRoot(mensagemDTO);
+    public MensagemDto obterProximaMensagem(MensagemRecebidaDTO mensagemRecebida) {
+		System.out.println(mensagemRecebida.getIdMensagemPai());
+		long idSetor = mensagemRecebida.getIdSetor();
+		Mensagem mensagemEnviar;
+		Long minutosUltimaInteracao = this.tempoUltimaMensagemEmMinutos(mensagemRecebida);
+		// mostra mensagem root se tiver passado 5 minutos ou
+		// se for a primeira mensagem daquele contato para aquele ususario
+		if(minutosUltimaInteracao == null || minutosUltimaInteracao > TEMPO_RESET_CONVERSA || mensagemRecebida.getIdMensagemPai() == null) {
+			mensagemEnviar = this.mensagemRepository.obterMensagemRoot(idSetor);
 		}
 		else {
-			query = MensagemSpecification.proximaMensagem(mensagemDTO);
+			mensagemEnviar = this.mensagemRepository.obterMensagemFilha(mensagemRecebida.getInputPai(),
+					mensagemRecebida.getIdMensagemPai(), idSetor);
 		}
 
-    	Optional<Mensagem> mensagemEncontrada = mensagemRepository.findOne(query);
+		MensagemDto retorno;
 
-		Mensagem retorno;
-		if(mensagemEncontrada.isPresent()){
-			retorno = mensagemEncontrada.get();
-			this.concatenarInputsValidosNaMensagem(retorno,mensagemDTO.getIdSetor(), retorno.getId());
+		// buscando os inputs aceitos
+		//o usuário enviou tudo certo
+		if(mensagemEnviar != null ){
+			List<Input> inputsValidos = this.inputRepository.obterInputsValidosDeMensagem(mensagemEnviar.getId(), idSetor);
+			retorno = new MensagemDto(mensagemEnviar, inputsValidos);
 		}
+		// o usuário enviou errado
 		else{
-			retorno = this.mensagemErro(mensagemDTO);
-			this.concatenarInputsValidosNaMensagem(retorno, mensagemDTO.getIdSetor(), retorno.getIdMensagemPai());
+			List<Input> inputsValidos = this.inputRepository.obterInputsValidosDeMensagem(mensagemRecebida.getIdMensagemPai(), idSetor);
+			retorno = MensagemDto.builder()
+					.id(mensagemRecebida.getIdMensagemPai())
+					.idSetor(mensagemRecebida.getIdSetor())
+					.conteudo("input incorreto")
+					.inputsFilhos(inputsValidos)
+					.build();
 		}
 
 		return retorno;
     }
 
-	private boolean verificarExistenciaMensagemPorInput(String input){
-		return mensagemRepository.existsByInputPai(input);
-	}
-
-	private List<String> obterInputsValidos(Long idSetor, Long idMensagemPai){
-		return mensagemRepository.obterInputsValidos(idSetor, idMensagemPai);
-	}
-
-    public Mensagem criarMensagem(Mensagem mensagem) throws MensagemInvalidaException {
+    public Mensagem criarMensagem(MensagemSalvarDto mensagem) throws MensagemInvalidaException {
     	String erro = this.validarMensagem(mensagem);
     	if(!erro.isEmpty()) {
     		throw new MensagemInvalidaException(erro);
     	}
-        return mensagemRepository.save(mensagem);
+		Mensagem novaMensagem = Mensagem.builder()
+				.idSetor(mensagem.getIdSetor())
+				.conteudo(mensagem.getConteudo())
+				.build();
+        Mensagem mensagemSalva = mensagemRepository.save(novaMensagem);
+
+		Input inputSalvo = inputService.salvarInput(mensagemSalva, mensagem.getInputPai());
+		// TODO tratamento de erros
+		return mensagemSalva;
     }
 
-    public Mensagem atualizarMensagem(Long id, Mensagem mensagem) throws MensagemInvalidaException {
-		String erro = this.validarMensagem(id,mensagem);
-		if(!erro.isEmpty()){
-			throw new MensagemInvalidaException(erro);
-		}
-		mensagem.setId(id);
+    public Mensagem atualizarMensagem(Mensagem mensagem) throws MensagemInvalidaException {
+//		String erro = this.validarMensagem(id,mensagem);
+//		if(!erro.isEmpty()){
+//			throw new MensagemInvalidaException(erro);
+//		}
 		return mensagemRepository.save(mensagem);
     }
 
-    public void deletarMensagem(Long id) {
-        mensagemRepository.deleteById(id);
+    public void deletarMensagem(Mensagem m) {
+		deletarMensagemCascata(m);
+		inputRepository.deleteByIdMensagemFilha(null);
     }
+
+	public void deletarMensagemCascata(Mensagem m){
+		List<Input> inputsFilhas = this.inputRepository.obterInputsValidosDeMensagem(m.getId(), m.getIdSetor());
+		for(Input i: inputsFilhas){
+			Mensagem mensagemFilha = this.mensagemRepository.findById(i.getIdMensagemFilha()).get();
+			deletarMensagemCascata(mensagemFilha);
+			this.inputRepository.delete(i);
+		}
+		mensagemRepository.deleteById(m.getId());
+	}
     
-    private String validarMensagem(Mensagem mensagem) {
+    private String validarMensagem(MensagemSalvarDto mensagem) {
     	String erro = "";
     	if(mensagem == null) {
     		erro = "Não há nenhuma mensagem";
@@ -97,47 +140,47 @@ public class MensagemService {
     		if(mensagem.getConteudo().isBlank()) {
     			erro += "Não há conteudo na mensagem \n";
     		}
-    		if((mensagem.getIdMensagemPai() == null) &&
-    				!(mensagem.getInputPai() == null || mensagem.getInputPai().isBlank())) {
-    			erro += "Mensagem root não pode ter inputPai \n";
-    		}
-    		if((mensagem.getIdMensagemPai() != null) &&
-    				(mensagem.getInputPai() == null || mensagem.getInputPai().isBlank())) {
-    			erro += "Mensagem filha precisa ter inputPai \n";
-    		}
     	}
     	return erro;
     }
 
-	private String validarMensagem(Long id, Mensagem mensagem){
-		String erro = "";
-		if(id == null){
-			erro += "É necessario colocar id para atualizar a mensagem \n";
-		}
-		erro += this.validarMensagem(mensagem);
-		return erro;
-	}
+//	private String validarMensagem(Long id, Mensagem mensagem){
+//		String erro = "";
+//		if(id == null){
+//			erro += "É necessario colocar id para atualizar a mensagem \n";
+//		}
+//		erro += this.validarMensagem(mensagem);
+//		return erro;
+//	}
 
-	private Long tempoUltimaMensagemEmMinutos(MensagemRecebidaDTO mensagemDTO){
+	private Long tempoUltimaMensagemEmMinutos(MensagemRecebidaDTO mensagemRecebida){
 		Long retorno = null;
-		if(contatoService.obterContatoPorNumero(mensagemDTO.getNumeroContato()) != null){
-			LocalDateTime tempoUltimaMensagem = mensagemHistoricoService.obterTempoUltimaMensagemRecebidaPorContato(mensagemDTO);
+		if(contatoService.obterContatoPorNumero(mensagemRecebida.getNumeroContato()) != null){
+			LocalDateTime tempoUltimaMensagem = mensagemHistoricoService.obterTempoUltimaMensagemRecebidaPorContato(mensagemRecebida);
 			retorno = ChronoUnit.MINUTES.between(tempoUltimaMensagem, LocalDateTime.now());
 		}
 		return retorno;
 	}
 
-	private Mensagem mensagemErro(MensagemRecebidaDTO mensagemDTO){
-		return Mensagem.builder()
-				.idMensagemPai(mensagemDTO.getIdMensagemPai())
-				.idSetor(mensagemDTO.getIdSetor())
-				.conteudo("Input inválido").build();
+	private List<NodeGrafoDto> mensagensParaNodeGrafoDto(List<Mensagem> mensagens){
+		List<NodeGrafoDto> nodes = new ArrayList<>();
+		for(Mensagem m: mensagens){
+			NodeGrafoDto node = new NodeGrafoDto(m);
+			nodes.add(node);
+		}
+		return nodes;
 	}
 
-	private void concatenarInputsValidosNaMensagem(Mensagem mensagem,long idSetor, long idMensagem){
-		List<String> inputsValidos = this.obterInputsValidos(idSetor, idMensagem);
-		for(String input : inputsValidos){
-			mensagem.setConteudo(mensagem.getConteudo() + " \n " + input);
+	private List<EdgeGrafoDto> inputsParaEdgeGrafoDto(List<Input> inputs){
+		List<EdgeGrafoDto> edges = new ArrayList<>();
+		for(Input i: inputs){
+			EdgeGrafoDto edge = new EdgeGrafoDto(i);
+			edges.add(edge);
 		}
+		return edges;
+	}
+
+	public List<Setor> selecionarSetor(MensagemRecebidaDTO mensagemRecebidaDTO) {
+		return this.setorRepository.obterSetoresDeUsuario(mensagemRecebidaDTO.getIdUsuario());
 	}
 }
