@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import Senac.TCS.entities.Setor;
 import Senac.TCS.exception.CampoInvalidoException;
+import Senac.TCS.model.entity.Setor;
 import Senac.TCS.seletor.SetorSeletor;
-import Setor.TCS.service.SetorService;
+import Senac.TCS.service.SetorService;
 
 @RestController
 @ComponentScan(basePackages = "Setor.TCS.service")

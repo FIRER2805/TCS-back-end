@@ -2,52 +2,58 @@ DROP DATABASE IF EXISTS TCS;
 CREATE DATABASE TCS;
 USE TCS;
 
-CREATE TABLE mensagem (
-    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    conteudo VARCHAR(255) NOT NULL
-);
-
-CREATE TABLE input (
-    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    conteudo VARCHAR(100) NOT NULL
-);
-
-CREATE TABLE arvore_mensagem (
-    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    id_mensagem INT,
-    id_input INT,
-    FOREIGN KEY (id_mensagem) REFERENCES mensagem(id),
-    FOREIGN KEY (id_input) REFERENCES input(id)
-);
-
 CREATE TABLE usuario (
-    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE,
-    senha VARCHAR(255),
-    telefone CHAR(11) UNIQUE
+    senha VARCHAR(255)
+);
+
+create table telefone(
+	id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    id_usuario bigint not null,
+    ddd char(2),
+    ddi varchar(3),
+    numero char(9),
+    FOREIGN KEY (id_usuario) REFERENCES usuario(id)
 );
 
 CREATE TABLE setor (
-    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
-    descricao VARCHAR(255) NOT NULL,
-    id_arvore_mensagem INT,
-    FOREIGN KEY (id_arvore_mensagem) REFERENCES arvore_mensagem(id)
+    descricao VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE usuario_setor (
-    id_usuario INT,
-    id_setor INT,
+    id_usuario BIGINT,
+    id_setor BIGINT,
     administrador TINYINT NOT NULL DEFAULT 0,
     FOREIGN KEY (id_usuario) REFERENCES usuario(id),
     FOREIGN KEY (id_setor) REFERENCES setor(id)
 );
 
 create table contato(
-	id int not null auto_increment primary key
-	,id_usuario int not null
-	,nome varchar(255) not null
-	,numero char(11) unique
+	id BIGINT not null auto_increment primary key
+	,id_usuario BIGINT
+	,nome varchar(255)
+	,numero char(15) unique
 	,foreign key (id_usuario) references usuario(id)
+);
+
+CREATE TABLE mensagem (
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    conteudo VARCHAR(255) NOT NULL,
+    input_pai varchar(255),
+    id_mensagem_pai BIGINT,
+    FOREIGN KEY (id_mensagem_pai) references mensagem(id),
+    id_setor BIGINT null,
+    FOREIGN KEY (id_setor) references setor(id)
+);
+
+CREATE TABLE mensagem_historico(
+	id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	conteudo VARCHAR(255) NOT NULL,
+	data_envio DATETIME NOT NULL,
+	id_contato BIGINT NOT NULL,
+	FOREIGN KEY (id_contato) references contato(id)
 );

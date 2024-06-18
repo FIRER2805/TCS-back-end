@@ -1,4 +1,4 @@
-package Senac.TCS.entities;
+package Senac.TCS.model.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

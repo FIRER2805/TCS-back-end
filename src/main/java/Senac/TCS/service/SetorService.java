@@ -1,15 +1,15 @@
-package Setor.TCS.service;
+package Senac.TCS.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import Senac.TCS.entities.Setor;
 import Senac.TCS.exception.CampoInvalidoException;
+import Senac.TCS.model.entity.Setor;
 import Senac.TCS.repository.SetorRepository;
 import Senac.TCS.seletor.SetorSeletor;
-import java.util.stream.Collectors;
 
 @Service
 public class SetorService {
