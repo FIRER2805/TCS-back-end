@@ -50,6 +50,12 @@ public class ContatoController {
         Contato contatoRetornado = this.contatoService.estaAutomatizado(contato);
         return ResponseEntity.ok().body(contatoRetornado);
     }
+
+    @PostMapping("atendimentoManual")
+    public ResponseEntity atendimentoManual(@RequestBody Contato contato){
+        Contato contatoRetornado = this.contatoService.atendimentoManual(contato);
+        return ResponseEntity.ok().body(contatoRetornado);
+    }
     
     @DeleteMapping("/{id}")
     public void deletarContato(@PathVariable Long id)  {

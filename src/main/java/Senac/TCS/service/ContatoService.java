@@ -55,4 +55,13 @@ public class ContatoService {
 		}
 		return new Contato();
 	}
+
+	public Contato atendimentoManual(Contato contato) {
+		Contato contatoRetornado = this.obterContatoPorNumero(contato.getNumero());
+		if(contatoRetornado != null){
+			contatoRetornado.setAutomatizado(contato.isAutomatizado());
+			return this.atualizarContato(contatoRetornado.getId(), contatoRetornado);
+		}
+		return new Contato();
+	}
 }
