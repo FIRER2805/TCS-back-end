@@ -48,4 +48,11 @@ public class ContatoService {
 		return (List<Contato>) contatoRepository.findAll();
 	}
 
+	public Contato estaAutomatizado(Contato contato) {
+		Contato retorno = this.contatoRepository.findByNumero(contato.getNumero());
+		if(retorno != null){
+			return retorno;
+		}
+		return new Contato();
+	}
 }

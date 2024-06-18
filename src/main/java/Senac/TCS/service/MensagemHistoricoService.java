@@ -57,6 +57,7 @@ public class MensagemHistoricoService {
 			contato = new Contato();
 			contato.setNumero(mensagemHistoricoDto.getNumeroContato());
 			contato.setIdUsuario(mensagemHistoricoDto.getIdUsuario());
+			contato.setAutomatizado(true);
 			contato = contatoService.criarContato(contato);
 		}
 
