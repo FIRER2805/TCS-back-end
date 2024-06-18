@@ -1,5 +1,6 @@
 package Senac.TCS.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -36,6 +37,10 @@ public class MensagemHistoricoService {
     public LocalDateTime obterTempoUltimaMensagemRecebidaPorContato(MensagemRecebidaDTO mensagemDto) {
     	Contato contato = contatoService.obterContatoPorNumero(mensagemDto.getNumeroContato());
     	LocalDateTime dataRetornada = mensagemHistoricoRepository.obterDataUltimaMensagem(contato.getId(),mensagemDto.getIdUsuario());
+		if(dataRetornada == null){
+			System.out.println(LocalDateTime.now());
+			return LocalDateTime.now();
+		}
     	return dataRetornada;
     }
 
