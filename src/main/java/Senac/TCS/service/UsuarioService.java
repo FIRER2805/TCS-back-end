@@ -10,12 +10,12 @@ import Senac.TCS.exception.CampoInvalidoException;
 import Senac.TCS.exception.UsuarioInvalidoException;
 import Senac.TCS.model.entity.Usuario;
 import Senac.TCS.repository.UsuarioRepository;
-
 @Service
 public class UsuarioService {
 
 	@Autowired
 	private UsuarioRepository usuarioRepository;
+  
 
 	public Usuario criar(Usuario usuario) throws UsuarioInvalidoException, CampoInvalidoException {
 
@@ -34,6 +34,10 @@ public class UsuarioService {
 	
 	 public List<Usuario> listarUsuariosPorSetor(Long idSetor) {
 	        return usuarioRepository.findUsuariosByIdSetor(idSetor);
+	    }
+	 
+	 public void inserirUsuarioNoSetor(Long idUsuario, Long idSetor, boolean administrador) {
+	        usuarioRepository.inserirUsuarioNoSetor(idUsuario, idSetor, administrador);
 	    }
 
 	public Usuario buscarPorID(Long id) {
@@ -116,5 +120,6 @@ public class UsuarioService {
 
 		return senha.toString();
 	}
+
 
 }

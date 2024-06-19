@@ -1,11 +1,11 @@
 package Senac.TCS.repository;
 
 import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
+import org.springframework.transaction.annotation.Transactional;
 import Senac.TCS.model.entity.Usuario;
 
 @Repository
@@ -22,6 +22,11 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long>{
 	 		+ " us.id_usuario = u.id "
 	 		+ " join setor s on "
 	 		+ " s.id = us.id_setor "
-	 		+ " where s.id = ?1 " ,nativeQuery  = true)
+	 		+ " where s.id = ? " ,nativeQuery  = true)
 	    List<Usuario> findUsuariosByIdSetor(Long idSetor);
-}
+	    
+	    @Modifying
+	    @Transactional
+	    @Query(value = "INSERT INTO usuario_setor (id_usuario, id_setor, administrador) VALUES (?, ?, ?)", nativeQuery = true)
+	    void inserirUsuarioNoSetor(Long idUsuario, Long idSetor, boolean administrador);
+	}

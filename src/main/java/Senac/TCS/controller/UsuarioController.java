@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import Senac.TCS.exception.CampoInvalidoException;
@@ -45,6 +47,12 @@ public class UsuarioController {
 	public List<Usuario> buscarTodos() {
 		return service.buscarTodos();
 	}
+	
+	@PostMapping("/setorInserirUsuario")
+    public ResponseEntity<Void> adicionarUsuarioAoSetor(@RequestParam Long idUsuario, @RequestParam Long idSetor, @RequestParam boolean administrador) {
+        usuarioService.inserirUsuarioNoSetor(idUsuario, idSetor, administrador);
+        return ResponseEntity.ok().build();
+    }
 	
 	@GetMapping("/setor/{idSetor}")
     public List<Usuario> listarUsuariosPorSetor(@PathVariable Long idSetor) {
