@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import Senac.TCS.dto.SetorDTO;
+import Senac.TCS.exception.CampoInvalidoException;
 import Senac.TCS.model.entity.Setor;
 import Senac.TCS.seletor.SetorSeletor;
 import Senac.TCS.service.SetorService;
@@ -60,16 +61,12 @@ public class SetorController {
 		return service.consultarPorId(id.longValue());
 	}
 
-	
 	@PutMapping("/atualizar")
-    public ResponseEntity<Setor> atualizarSetor(@RequestBody SetorDTO setorDTO, @RequestParam Long usuarioId) {
-        try {
-            Setor setorAtualizado = service.atualizar(new Setor(setorDTO), usuarioId);
-            return ResponseEntity.ok(setorAtualizado);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(null);
-        }
-    }
+	public boolean atualizar(@RequestBody Setor setorParaAtualizar) throws CampoInvalidoException {
+		return service.atualizar(setorParaAtualizar) != null;
+	}
+	
+
 	@DeleteMapping("/{id}")
 	public boolean excluir(@PathVariable int id) {
 		return service.excluir(id);

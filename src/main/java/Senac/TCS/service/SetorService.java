@@ -59,12 +59,12 @@ public class SetorService {
             usuarioRepository.inserirUsuarioNoSetor(idUsuario, setorSalvo.getIdSetor(), true);
             return setorSalvo;
         } else {
-            return atualizar(novoSetor, idUsuario);
+            return atualizar(novoSetor);
         }
     }
 	
 	
-	public Setor atualizar(Setor novoSetor, Long idUsuario) throws CampoInvalidoException {
+	public Setor atualizar(Setor novoSetor) throws CampoInvalidoException {
 		validarCamposObrigatorios(novoSetor);
 		// fazer uma validacao para verificar se tem id antes de atualizar
 		if (novoSetor.getIdSetor() != null) {
@@ -72,8 +72,8 @@ public class SetorService {
 		} else {
 			throw new IllegalArgumentException("Não é possível atualizar um setor com um ID indefinido.");
 		}
-	}
-
+			
+		}
 	public Setor consultarPorId(long id) {
 		return setorRepository.findById(id).get();
 	}
