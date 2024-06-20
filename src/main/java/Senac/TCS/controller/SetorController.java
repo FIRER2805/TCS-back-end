@@ -30,7 +30,7 @@ public class SetorController {
 
 	@Autowired
 	private SetorService service = new SetorService();
-	private SetorDTO setorDTO = new SetorDTO();
+
 	
 	@PostMapping("/seletor")
 	public List<Setor> consultarComFiltros(SetorSeletor seletor) {
