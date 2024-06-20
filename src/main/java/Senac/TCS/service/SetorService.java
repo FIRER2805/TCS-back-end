@@ -9,14 +9,18 @@ import org.springframework.stereotype.Service;
 import Senac.TCS.exception.CampoInvalidoException;
 import Senac.TCS.model.entity.Setor;
 import Senac.TCS.repository.SetorRepository;
+import Senac.TCS.repository.UsuarioRepository;
 import Senac.TCS.seletor.SetorSeletor;
+import jakarta.transaction.Transactional;
 
 @Service
 public class SetorService {
 
 	@Autowired
 	private SetorRepository setorRepository;
-
+	@Autowired
+	private UsuarioRepository usuarioRepository;
+	
 	public List<Setor> consultarComFiltros(SetorSeletor seletor) {
 		List<Setor> setores = listarTodos();
 
@@ -47,16 +51,20 @@ public class SetorService {
 		return setorRepository.findAll();
 	}
 
-	public Setor inserir(Setor novoSetor) throws CampoInvalidoException {
-		validarCamposObrigatorios(novoSetor);
-		if (novoSetor.getIdSetor() == null) {
-			return setorRepository.save(novoSetor);
-		} else {
-			throw new IllegalArgumentException("Não é possível inserir um setor com um ID já definido.");
-		}
-	}
-
-	public Setor atualizar(Setor novoSetor) throws CampoInvalidoException {
+	@Transactional
+    public Setor inserir(Setor novoSetor, Long idUsuario) throws CampoInvalidoException {
+        validarCamposObrigatorios(novoSetor);
+        if (novoSetor.getIdSetor() == null) {
+            Setor setorSalvo = setorRepository.save(novoSetor);
+            usuarioRepository.inserirUsuarioNoSetor(idUsuario, setorSalvo.getIdSetor(), true);
+            return setorSalvo;
+        } else {
+            return atualizar(novoSetor, idUsuario);
+        }
+    }
+	
+	
+	public Setor atualizar(Setor novoSetor, Long idUsuario) throws CampoInvalidoException {
 		validarCamposObrigatorios(novoSetor);
 		// fazer uma validacao para verificar se tem id antes de atualizar
 		if (novoSetor.getIdSetor() != null) {

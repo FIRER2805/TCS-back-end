@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,9 +13,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import Senac.TCS.exception.CampoInvalidoException;
+import Senac.TCS.dto.SetorDTO;
 import Senac.TCS.model.entity.Setor;
 import Senac.TCS.seletor.SetorSeletor;
 import Senac.TCS.service.SetorService;
@@ -28,6 +30,7 @@ public class SetorController {
 
 	@Autowired
 	private SetorService service = new SetorService();
+	private SetorDTO setorDTO = new SetorDTO();
 	
 	@PostMapping("/seletor")
 	public List<Setor> consultarComFiltros(SetorSeletor seletor) {
@@ -40,21 +43,33 @@ public class SetorController {
 		return setores;
 	}
 
+	
 	@PostMapping("/inserir")
-	public Setor inserir(@RequestBody Setor novoSetor) throws CampoInvalidoException {
-		return service.inserir(novoSetor);
-	}
-
+    public ResponseEntity<Setor> inserirSetor(@RequestBody SetorDTO setorDTO, @RequestParam Long idUsuario) {
+        try {
+            Setor setorCriado = service.inserir(new Setor(setorDTO), idUsuario);
+            return ResponseEntity.ok(setorCriado);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+	
+	
 	@GetMapping("/{id}")
 	public Setor pesquisarPorId(@PathVariable Integer id) {
 		return service.consultarPorId(id.longValue());
 	}
 
-	@PutMapping("/atualizar")
-	public boolean atualizar(@RequestBody Setor setorParaAtualizar) throws CampoInvalidoException {
-		return service.atualizar(setorParaAtualizar) != null;
-	}
 	
+	@PutMapping("/atualizar")
+    public ResponseEntity<Setor> atualizarSetor(@RequestBody SetorDTO setorDTO, @RequestParam Long usuarioId) {
+        try {
+            Setor setorAtualizado = service.atualizar(new Setor(setorDTO), usuarioId);
+            return ResponseEntity.ok(setorAtualizado);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
 	@DeleteMapping("/{id}")
 	public boolean excluir(@PathVariable int id) {
 		return service.excluir(id);

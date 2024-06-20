@@ -1,5 +1,6 @@
 package Senac.TCS.model.entity;
 
+import Senac.TCS.dto.SetorDTO;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -26,6 +27,12 @@ public class Setor {
 		this.descricao = descricao;
 		
 	}
+	
+	// Construtor que aceita um SetorDTO
+    public Setor(SetorDTO setorDTO) {
+        this.nome = setorDTO.getNome();
+        this.descricao = setorDTO.getDescricao();
+    }
 	
 	public Long getIdSetor() {
 		return id;
