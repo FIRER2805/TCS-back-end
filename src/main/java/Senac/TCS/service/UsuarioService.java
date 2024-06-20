@@ -4,6 +4,7 @@ import java.security.SecureRandom;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import Senac.TCS.exception.CampoInvalidoException;
@@ -34,6 +35,15 @@ public class UsuarioService {
 	
 	 public List<Usuario> listarUsuariosPorSetor(Long idSetor) {
 	        return usuarioRepository.findUsuariosByIdSetor(idSetor);
+	    }
+	 
+	 public boolean excluirUsuarioSetor(Long idUsuario, Long idSetor) {
+	        try {
+	            usuarioRepository.removerUsuarioDoSetor(idUsuario, idSetor );
+	            return true;
+	        } catch (EmptyResultDataAccessException e) {
+	            return false;
+	        }
 	    }
 	 
 	 public void inserirUsuarioNoSetor(Long idUsuario, Long idSetor, boolean administrador) {

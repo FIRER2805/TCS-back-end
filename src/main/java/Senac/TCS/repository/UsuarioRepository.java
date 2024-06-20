@@ -1,11 +1,14 @@
 package Senac.TCS.repository;
 
 import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
 import Senac.TCS.model.entity.Usuario;
 
 @Repository
@@ -29,4 +32,11 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long>{
 	    @Transactional
 	    @Query(value = "INSERT INTO usuario_setor (id_usuario, id_setor, administrador) VALUES (?, ?, ?)", nativeQuery = true)
 	    void inserirUsuarioNoSetor(Long idUsuario, Long idSetor, boolean administrador);
-	}
+	    
+	  //QUERY PARA EXCLUIR USUARIO SETOR
+	    @Modifying
+	    @Transactional
+	    @Query(value = "DELETE FROM usuario_setor WHERE id_usuario = :idUsuario AND id_setor = :idSetor", nativeQuery = true)
+	    void removerUsuarioDoSetor(@Param("idUsuario") Long idUsuario, @Param("idSetor") Long idSetor);
+}
+	

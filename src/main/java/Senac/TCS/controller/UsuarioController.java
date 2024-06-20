@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -52,6 +53,16 @@ public class UsuarioController {
     public ResponseEntity<Void> adicionarUsuarioAoSetor(@RequestParam Long idUsuario, @RequestParam Long idSetor, @RequestParam boolean administrador) {
         usuarioService.inserirUsuarioNoSetor(idUsuario, idSetor, administrador);
         return ResponseEntity.ok().build();
+    }
+	
+	@DeleteMapping("/excluirUsuarioDoSetor")
+    public ResponseEntity<Void> excluirUsuarioDoSetor(@RequestParam Long idUsuario, @RequestParam Long idSetor) {
+        boolean excluido = usuarioService.excluirUsuarioSetor(idUsuario, idSetor);
+        if (excluido) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 	
 	@GetMapping("/setor/{idSetor}")
