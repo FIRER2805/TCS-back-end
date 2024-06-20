@@ -23,5 +23,8 @@ public interface ContatoRepository extends CrudRepository<Contato, Long> {
     		+ " LEFT JOIN mensagem_historico mh ON c.id = mh.id_contato "
     		+ " ORDER BY mh.data_envio DESC ", nativeQuery = true)
     	List<Contato> findContatoByMostRecentMessage();
+	
+    
+    Contato findByNumero(String numero);
 
 }

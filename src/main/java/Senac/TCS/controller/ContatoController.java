@@ -42,6 +42,17 @@ public class ContatoController {
 		return contatoService.criarContato(contato);
 	}
 
+	@GetMapping("/{numero}")
+	public ResponseEntity<Contato> buscarPorNumero(@PathVariable String numero) {
+		Contato contato = contatoService.obterContatoPorNumero(numero);
+		if (contato != null) {
+			return ResponseEntity.ok(contato);
+		} else {
+			return ResponseEntity.notFound().build();
+		}
+
+	}
+
 	@GetMapping("/usuario/{idUsuario}")
 	public ResponseEntity<List<Contato>> buscarContatosPorUsuario(@PathVariable Long idUsuario) {
 		List<Contato> contatos = contatoService.findContatosByUsuario(idUsuario);

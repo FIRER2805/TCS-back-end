@@ -45,6 +45,9 @@ public class ContatoService {
 		return cont;
 	}
 
+	public Contato obterContatoPorNumero(String numero){
+		return contatoRepository.findByNumero(numero);
+	}
 	public void deletarContato(Long id) throws ContatoException {
 		if(contatoRepository.existsById(id)) {
 			contatoRepository.deleteById(id);
