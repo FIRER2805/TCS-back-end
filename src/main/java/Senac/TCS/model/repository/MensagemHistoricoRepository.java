@@ -24,5 +24,5 @@ public interface MensagemHistoricoRepository extends CrudRepository<MensagemHist
 			+ "limit 1;", nativeQuery = true)
 	public LocalDateTime obterDataUltimaMensagem(Long idContato, Long idUsuario);
 	
-	public List<MensagemHistorico> findByIdContato(Long idContato);
+	public List<MensagemHistorico> findByIdContatoOrderByDataEnvioDesc(Long idContato);
 }

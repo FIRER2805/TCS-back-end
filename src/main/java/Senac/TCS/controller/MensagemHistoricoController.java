@@ -32,7 +32,7 @@ public class MensagemHistoricoController {
 
     @GetMapping("/{idContato}")
     public ResponseEntity<List<MensagemHistorico>> historicoMensagemPorContato(@PathVariable Long idContato) {
-        return new ResponseEntity<>(mensagemHistoricoService.buscarHistoricoPorIdConteudo(idContato), HttpStatus.FOUND);
+        return new ResponseEntity<>(mensagemHistoricoService.buscarHistoricoPorIdConteudo(idContato), HttpStatus.OK);
     }
 
     @PostMapping

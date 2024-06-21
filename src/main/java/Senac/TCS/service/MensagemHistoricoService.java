@@ -27,7 +27,7 @@ public class MensagemHistoricoService {
     }
     
     public List<MensagemHistorico> buscarHistoricoPorIdConteudo(Long idContato){
-    	return (List<MensagemHistorico>) mensagemHistoricoRepository.findByIdContato(idContato);
+    	return (List<MensagemHistorico>) mensagemHistoricoRepository.findByIdContatoOrderByDataEnvioDesc(idContato);
     }
 
     public MensagemHistorico obterMensagemPorId(Long id) {
