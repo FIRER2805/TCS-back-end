@@ -30,7 +30,7 @@ public class UsuarioService {
                 .nome(cadastroDTO.getNome())
                 .email(cadastroDTO.getEmail())
                 .senha(hashSenha)
-                .numero(cadastroDTO.getTelefone())
+                .telefone(cadastroDTO.getTelefone())
                 .build();
 
         if(this.usuarioRepository.existsByEmail(cadastroDTO.getEmail())){
