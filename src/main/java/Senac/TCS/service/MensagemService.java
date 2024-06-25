@@ -56,7 +56,6 @@ public class MensagemService {
 	}
     
     public MensagemDto obterProximaMensagem(MensagemRecebidaDTO mensagemRecebida) {
-		System.out.println(mensagemRecebida.getIdMensagemPai());
 		long idSetor = mensagemRecebida.getIdSetor();
 		Mensagem mensagemEnviar;
 		Long minutosUltimaInteracao = this.tempoUltimaMensagemEmMinutos(mensagemRecebida);
@@ -86,7 +85,7 @@ public class MensagemService {
 			retorno = MensagemDto.builder()
 					.id(mensagemRecebida.getIdMensagemPai())
 					.idSetor(mensagemRecebida.getIdSetor())
-					.conteudo("input incorreto")
+					.conteudo("Opção inválida!\nas opções aceitas são essas:\n")
 					.inputsFilhos(inputsValidos)
 					.build();
 		}
