@@ -38,4 +38,7 @@ public class Contato {
 
 	@Column(name = "numero", unique = true, nullable = false)
 	private String numero;
+
+	@Column(name="automatizado")
+	private boolean automatizado;
 }

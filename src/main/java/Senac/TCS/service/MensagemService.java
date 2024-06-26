@@ -60,9 +60,11 @@ public class MensagemService {
 		long idSetor = mensagemRecebida.getIdSetor();
 		Mensagem mensagemEnviar;
 		Long minutosUltimaInteracao = this.tempoUltimaMensagemEmMinutos(mensagemRecebida);
-		// mostra mensagem root se tiver passado 5 minutos ou
-		// se for a primeira mensagem daquele contato para aquele ususario
-		if(minutosUltimaInteracao == null || minutosUltimaInteracao > TEMPO_RESET_CONVERSA || mensagemRecebida.getIdMensagemPai() == null) {
+		// mostra mensagem raiz se tiver passado 5 minutos ou
+		// se for a primeira mensagem daquele contato para aquele ususario mostra mensagem raiz
+		if(minutosUltimaInteracao == null
+				|| minutosUltimaInteracao > TEMPO_RESET_CONVERSA
+				|| mensagemRecebida.getIdMensagemPai() == null) {
 			mensagemEnviar = this.mensagemRepository.obterMensagemRoot(idSetor);
 		}
 		else {
@@ -103,8 +105,9 @@ public class MensagemService {
 				.build();
         Mensagem mensagemSalva = mensagemRepository.save(novaMensagem);
 
-		Input inputSalvo = inputService.salvarInput(mensagemSalva, mensagem.getInputPai());
-		// TODO tratamento de erros
+		if(mensagem.getInputPai() != null){
+			Input inputSalvo = inputService.salvarInput(mensagemSalva, mensagem.getInputPai());
+		}
 		return mensagemSalva;
     }
 

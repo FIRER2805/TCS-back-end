@@ -3,7 +3,9 @@ package Senac.TCS.controller;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,6 +43,18 @@ public class ContatoController {
     @GetMapping("/{id}")
     public Optional<Contato> buscarContatosPorUsuario (@PathVariable Long id) {
         return contatoService.buscarContatosPorUsuario(id);
+    }
+
+    @PostMapping("/automatizado")
+    public ResponseEntity estaAutomatizado(@RequestBody Contato contato){
+        Contato contatoRetornado = this.contatoService.estaAutomatizado(contato);
+        return ResponseEntity.ok().body(contatoRetornado);
+    }
+
+    @PostMapping("atendimentoManual")
+    public ResponseEntity atendimentoManual(@RequestBody Contato contato){
+        Contato contatoRetornado = this.contatoService.atendimentoManual(contato);
+        return ResponseEntity.ok().body(contatoRetornado);
     }
     
     @DeleteMapping("/{id}")
