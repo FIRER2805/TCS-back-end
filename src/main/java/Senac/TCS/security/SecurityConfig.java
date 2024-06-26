@@ -40,6 +40,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(new AntPathRequestMatcher("/auth/cadastro", "POST")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/auth/login", "POST")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/mensagem/proximo", "POST")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/mensagem/selecionarSetor", "POST")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/contatos/automatizado", "POST")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/contatos/atendimentoManual", "POST")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/historico-mensagem", "POST")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/contatos", "POST")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
