@@ -4,9 +4,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import Senac.TCS.exception.CampoInvalidoException;
+import Senac.TCS.exception.IntegrityConstraintViolationException;
 import Senac.TCS.model.entity.Setor;
 import Senac.TCS.repository.SetorRepository;
 import Senac.TCS.repository.UsuarioRepository;
@@ -79,9 +81,18 @@ public class SetorService {
 	}
 
 	public boolean excluir(Integer id) {
-		this.setorRepository.deleteById(id.longValue());
-		return true;
-	}
+        try {
+            setorRepository.deleteById(id.longValue());
+            return true;
+        } catch (DataIntegrityViolationException e) {
+            Throwable cause = e.getRootCause();
+            if (cause instanceof java.sql.SQLIntegrityConstraintViolationException) {
+                throw new IntegrityConstraintViolationException("Não é possível excluir setor com usuário vinculado.");
+            } else {
+                throw e;
+            }
+        }
+    }
 
 	private String validarCampoString(String valorCampo, String nomeCampo) {
 		if (valorCampo == null || valorCampo.trim().isEmpty()) {
