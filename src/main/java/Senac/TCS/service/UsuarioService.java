@@ -26,6 +26,10 @@ public class UsuarioService {
         return usuarioRepository.findById(id).get();
     }
 
+	public List<Usuario> listarUsuariosPorSetor(Long idSetor) {
+		return usuarioRepository.findUsuariosByIdSetor(idSetor);
+	}
+
     public Usuario inserir(CadastroDTO cadastroDTO) throws CampoInvalidoException {
         String hashSenha = new BCryptPasswordEncoder().encode(cadastroDTO.getSenha());
         Usuario usuario = Usuario.builder()

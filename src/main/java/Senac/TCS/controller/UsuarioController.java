@@ -29,20 +29,10 @@ import Senac.TCS.service.UsuarioService;
 public class UsuarioController {
 
 	@Autowired
-	UsuarioService service = new UsuarioService();
+	UsuarioService service;
 	@Autowired
     private UsuarioService usuarioService;
 
-	@PostMapping
-	public Usuario criar(@RequestBody Usuario usuario) {
-
-		try {
-			usuario = service.criar(usuario);
-		} catch (UsuarioInvalidoException | CampoInvalidoException erro) {
-			erro.getMessage();
-		}
-		return usuario;
-	}
 
 	@GetMapping("/listarTodos")
 	public List<Usuario> buscarTodos() {
@@ -72,7 +62,7 @@ public class UsuarioController {
 
 	@GetMapping("/{id}")
 	public Usuario buscarPorID(@PathVariable Long id) {
-		return service.buscarPorID(id);
+		return service.buscarPorId(id);
 	}
 
 	@PutMapping("/{id}")
@@ -88,17 +78,7 @@ public class UsuarioController {
 
 	@DeleteMapping("/{id}")
 	public void excluirPorId(@PathVariable Long id) {
-		service.excluirPorId(id);
-	}
-
-	public Usuario efetuarLogin(Usuario usuario) {
-
-		try {
-			 usuario = service.efetuarLogin(usuario);
-		} catch (CampoInvalidoException erro) {
-			erro.getMessage();
-		}
-		return usuario;
+		service.deletar(id);
 	}
 
 	public void recuperarSenha(String email) {

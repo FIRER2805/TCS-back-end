@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import Senac.TCS.model.entity.Setor;
 import Senac.TCS.model.repository.SetorRepository;
+import Senac.TCS.model.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -12,8 +13,6 @@ import org.springframework.stereotype.Service;
 import Senac.TCS.exception.CampoInvalidoException;
 import Senac.TCS.model.seletor.SetorSeletor;
 import Senac.TCS.exception.IntegrityConstraintViolationException;
-import Senac.TCS.repository.UsuarioRepository;
-import Senac.TCS.model.seletor.SetorSeletor;
 import jakarta.transaction.Transactional;
 
 @Service
