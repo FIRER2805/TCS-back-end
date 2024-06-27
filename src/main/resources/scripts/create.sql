@@ -29,6 +29,7 @@ create table contato(
 	,id_usuario BIGINT
 	,nome varchar(255)
 	,numero char(30) unique
+	,automatizado boolean default 1
 	,foreign key (id_usuario) references usuario(id)
 );
 
