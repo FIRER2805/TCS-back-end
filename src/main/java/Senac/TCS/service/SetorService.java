@@ -55,7 +55,7 @@ public class SetorService {
 
 	public Setor inserir(Setor novoSetor) throws CampoInvalidoException {
 		validarCamposObrigatorios(novoSetor);
-		if (novoSetor.getId() == null) {
+		if (novoSetor.getIdSetor() == null) {
 			return setorRepository.save(novoSetor);
 		} else {
 			throw new IllegalArgumentException("Não é possível inserir um setor com um ID já definido.");
@@ -65,9 +65,9 @@ public class SetorService {
 	@Transactional
     public Setor inserir(Setor novoSetor, Long idUsuario) throws CampoInvalidoException {
         validarCamposObrigatorios(novoSetor);
-        if (novoSetor.getId() == null) {
+        if (novoSetor.getIdSetor() == null) {
             Setor setorSalvo = setorRepository.save(novoSetor);
-            usuarioRepository.inserirUsuarioNoSetor(idUsuario, setorSalvo.getId(), true);
+            usuarioRepository.inserirUsuarioNoSetor(idUsuario, setorSalvo.getIdSetor(), true);
             return setorSalvo;
         } else {
             return atualizar(novoSetor);
@@ -78,7 +78,7 @@ public class SetorService {
 	public Setor atualizar(Setor novoSetor) throws CampoInvalidoException {
 		validarCamposObrigatorios(novoSetor);
 		// fazer uma validacao para verificar se tem id antes de atualizar
-		if (novoSetor.getId() != null) {
+		if (novoSetor.getIdSetor() != null) {
 			return setorRepository.save(novoSetor);
 		} else {
 			throw new IllegalArgumentException("Não é possível atualizar um setor com um ID indefinido.");

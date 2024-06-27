@@ -1,12 +1,8 @@
 package Senac.TCS.model.entity;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import Senac.TCS.model.dto.SetorDTO;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 
 @Data
 @Entity
@@ -14,7 +10,8 @@ import jakarta.persistence.Table;
 public class Setor {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	@Column(name="id")
+	private Long idSetor;
 	private String nome;
 	private String descricao;
 	
@@ -24,7 +21,7 @@ public class Setor {
 	}
 	public Setor(Long idSetor, String nome, String descricao) {
 		super();
-		this.id = idSetor;
+		this.idSetor = idSetor;
 		this.nome = nome;
 		this.descricao = descricao;
 		
