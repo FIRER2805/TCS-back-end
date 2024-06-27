@@ -43,16 +43,19 @@ public class ContatoController {
 	}
 
 	@GetMapping("/{numero}")
-	public ResponseEntity<Contato> buscarPorNumero(@PathVariable String numero) {
-		Contato contato = contatoService.obterContatoPorNumero(numero);
-		if (contato != null) {
-			return ResponseEntity.ok(contato);
-		} else {
-			return ResponseEntity.notFound().build();
-		}
-
+	public ResponseEntity<List<Contato>> buscarPorNumero(@PathVariable String numero) {
+	    List<Contato> contatos = contatoService.obterContatosPorNumero(numero);
+	    if (!contatos.isEmpty()) {
+	        return ResponseEntity.ok(contatos);
+	    } else {
+	        return ResponseEntity.notFound().build();
+	    }
 	}
 
+	@GetMapping("/nome/{nome}")
+	public List<Contato> buscarContatoPorNome(@PathVariable String nome) {
+		return contatoService.buscarContatoPorNome(nome);
+	}
 	@GetMapping("/usuario/{idUsuario}")
 	public ResponseEntity<List<Contato>> buscarContatosPorUsuario(@PathVariable Long idUsuario) {
 		List<Contato> contatos = contatoService.findContatosByUsuario(idUsuario);
@@ -75,6 +78,7 @@ public class ContatoController {
 	public Contato atualizarContato(@PathVariable Long id, @RequestBody Contato contato) {
 		return contatoService.atualizarContato(id, contato);
 	}
+	
 
 	@GetMapping("/existencia/{numero}")
 	public ResponseEntity<String> verificarExistencia(@PathVariable String numero) {

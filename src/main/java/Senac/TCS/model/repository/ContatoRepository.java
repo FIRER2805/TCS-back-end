@@ -2,7 +2,6 @@ package Senac.TCS.model.repository;
 
 import java.util.List;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -15,6 +14,7 @@ import jakarta.transaction.Transactional;
 public interface ContatoRepository extends CrudRepository<Contato, Long> {
 
 	Long findIdByNumero(@Param("numero") String numero);
+	List<Contato> findByNomeLike(@Param("nome") String nome);
     List<Contato> findContatosByUsuario(long id_usuario);
     boolean existsByNumero(String numero);
     
@@ -24,7 +24,6 @@ public interface ContatoRepository extends CrudRepository<Contato, Long> {
     		+ " ORDER BY mh.data_envio DESC ", nativeQuery = true)
     	List<Contato> findContatoByMostRecentMessage();
 	
-    
-    Contato findByNumero(String numero);
+    List<Contato> findByNumeroLike(@Param("numero") String numero);
 
 }
