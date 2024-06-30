@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import Senac.TCS.exception.CampoInvalidoException;
 import Senac.TCS.exception.UsuarioInvalidoException;
 import Senac.TCS.model.entity.Usuario;
+import Senac.TCS.repository.UsuarioRepository;
 import Senac.TCS.service.UsuarioService;
 
 @RestController
@@ -32,7 +33,8 @@ public class UsuarioController {
 	UsuarioService service = new UsuarioService();
 	@Autowired
     private UsuarioService usuarioService;
-
+	@Autowired
+    private UsuarioRepository usuarioRepository;
 	@PostMapping
 	public Usuario criar(@RequestBody Usuario usuario) {
 
@@ -43,6 +45,12 @@ public class UsuarioController {
 		}
 		return usuario;
 	}
+	
+	@GetMapping("/exists")
+	 public ResponseEntity<Boolean> existsUsuarioNoSetor(@RequestParam Long idUsuario, @RequestParam Long idSetor) {
+	     int exists = usuarioRepository.existsByUsuarioIdAndSetorId(idUsuario, idSetor);
+	     return ResponseEntity.ok(exists == 1);
+	 }
 
 	@GetMapping("/listarTodos")
 	public List<Usuario> buscarTodos() {

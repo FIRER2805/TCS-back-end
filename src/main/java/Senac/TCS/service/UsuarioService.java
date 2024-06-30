@@ -47,7 +47,12 @@ public class UsuarioService {
 	    }
 	 
 	 public void inserirUsuarioNoSetor(Long idUsuario, Long idSetor, boolean administrador) {
-	        usuarioRepository.inserirUsuarioNoSetor(idUsuario, idSetor, administrador);
+	        int exists = usuarioRepository.existsByUsuarioIdAndSetorId(idUsuario, idSetor);
+	        if (exists == 0) {
+	            usuarioRepository.inserirUsuarioNoSetor(idUsuario, idSetor, administrador);
+	        } else {
+	            throw new IllegalArgumentException("Usuário já está no setor");
+	        }
 	    }
 
 	public Usuario buscarPorID(Long id) {

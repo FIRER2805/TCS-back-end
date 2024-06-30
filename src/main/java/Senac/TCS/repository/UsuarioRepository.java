@@ -38,5 +38,11 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long>{
 	    @Transactional
 	    @Query(value = "DELETE FROM usuario_setor WHERE id_usuario = :idUsuario AND id_setor = :idSetor", nativeQuery = true)
 	    void removerUsuarioDoSetor(@Param("idUsuario") Long idUsuario, @Param("idSetor") Long idSetor);
+	    
+	  //QUERY PARA VALIDAR USUARIO SETOR
+	    @Modifying
+	    @Transactional
+	    @Query(value = "SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END FROM usuario_setor WHERE id_usuario = :idUsuario AND id_setor = :idSetor", nativeQuery = true)
+	    int existsByUsuarioIdAndSetorId(@Param("idUsuario") Long idUsuario, @Param("idSetor") Long idSetor);
 }
 	
