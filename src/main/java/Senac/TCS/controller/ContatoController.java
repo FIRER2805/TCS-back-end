@@ -45,6 +45,11 @@ public class ContatoController {
         return contatoService.buscarContatosPorUsuario(id);
     }
 
+    @GetMapping("/mensagem-recente/{idUsuario}")
+    public List<Contato> contatoMensagemRec(@PathVariable Long idUsuario) {
+        return contatoService.contatoMensagemRec(idUsuario);
+    }
+
     @PostMapping("/automatizado")
     public ResponseEntity estaAutomatizado(@RequestBody Contato contato){
         Contato contatoRetornado = this.contatoService.estaAutomatizado(contato);

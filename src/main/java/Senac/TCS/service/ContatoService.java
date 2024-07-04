@@ -44,6 +44,10 @@ public class ContatoService {
 
 	}
 
+	public List<Contato> contatoMensagemRec(Long idUsuario) {
+		return (List<Contato>) contatoRepository.findContatoByMostRecentMessage(idUsuario);
+	}
+
 	public List<Contato> listarContatos() {
 		return (List<Contato>) contatoRepository.findAll();
 	}
