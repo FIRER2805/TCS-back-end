@@ -29,9 +29,9 @@ public class AuthenticationController {
     public ResponseEntity login(@RequestBody LoginDTO loginDTO){
         UsernamePasswordAuthenticationToken userNamePassword = new UsernamePasswordAuthenticationToken(loginDTO.getLogin(), loginDTO.getSenha());
         Authentication auth = this.authenticationManager.authenticate(userNamePassword);
-
+        Usuario usuarioLogado = (Usuario) auth.getPrincipal();
         String token = tokenService.gerarTokenJWT((Usuario) auth.getPrincipal());
-        return ResponseEntity.ok(new TokenDTO(token));
+        return ResponseEntity.ok(new TokenDTO(usuarioLogado.getId(),token));
     }
 
     @PostMapping("/cadastro")
