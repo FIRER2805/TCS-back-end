@@ -2,6 +2,7 @@ package Senac.TCS.controller;
 
 import java.util.List;
 
+import Senac.TCS.model.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
@@ -32,6 +33,15 @@ public class UsuarioController {
 	UsuarioService service;
 	@Autowired
     private UsuarioService usuarioService;
+
+	@Autowired
+	private UsuarioRepository usuarioRepository;
+
+	@GetMapping("/exists")
+	public ResponseEntity<Boolean> existsUsuarioNoSetor(@RequestParam Long idUsuario, @RequestParam Long idSetor) {
+		int exists = usuarioRepository.existsByUsuarioIdAndSetorId(idUsuario, idSetor);
+		return ResponseEntity.ok(exists == 1);
+	}
 
 
 	@GetMapping("/listarTodos")
