@@ -3,6 +3,8 @@ package Senac.TCS.controller;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import Senac.TCS.model.dto.RelatorioOpcaoUsos;
+import Senac.TCS.model.dto.RelatorioOpcaoUsosContatos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +35,16 @@ public class MensagemHistoricoController {
     @GetMapping("/{idContato}")
     public ResponseEntity<List<MensagemHistorico>> historicoMensagemPorContato(@PathVariable Long idContato) {
         return new ResponseEntity<>(mensagemHistoricoService.buscarHistoricoPorIdConteudo(idContato), HttpStatus.OK);
+    }
+
+    @GetMapping("/relatorio1/{idUsuario}")
+    public List<RelatorioOpcaoUsos> gerarRelatorioOpcaoUsos(@PathVariable Long idUsuario){
+        return mensagemHistoricoService.gerarRelatorioOpcaoUsos(idUsuario);
+    }
+
+    @GetMapping("/relatorio2/{idUsuario}")
+    public List<RelatorioOpcaoUsosContatos> gerarRelatorioOpcaoUsosContato(@PathVariable Long idUsuario){
+        return mensagemHistoricoService.gerarRelatorioOpcaoUsosContato(idUsuario);
     }
 
     @PostMapping

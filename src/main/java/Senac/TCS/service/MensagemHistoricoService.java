@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import Senac.TCS.model.dto.RelatorioOpcaoUsos;
+import Senac.TCS.model.dto.RelatorioOpcaoUsosContatos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,14 @@ public class MensagemHistoricoService {
     public List<MensagemHistorico> listarTodasMensagens() {
         return (List<MensagemHistorico>) mensagemHistoricoRepository.findAll();
     }
+
+	public List<RelatorioOpcaoUsos> gerarRelatorioOpcaoUsos(Long idUsuario){
+		return mensagemHistoricoRepository.buscarDadosRelatorioOpcaoUsos(idUsuario);
+	}
+
+	public List<RelatorioOpcaoUsosContatos> gerarRelatorioOpcaoUsosContato(Long idUsuario){
+		return mensagemHistoricoRepository.buscarDadosRelatorioOpcaoUsosContato(idUsuario);
+	}
     
     public List<MensagemHistorico> buscarHistoricoPorIdConteudo(Long idContato){
     	return (List<MensagemHistorico>) mensagemHistoricoRepository.findByIdContatoOrderByDataEnvioDesc(idContato);
