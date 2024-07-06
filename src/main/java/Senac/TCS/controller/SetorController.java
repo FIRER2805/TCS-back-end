@@ -2,6 +2,7 @@ package Senac.TCS.controller;
 
 import java.util.List;
 
+import Senac.TCS.model.dto.SetorInfoDTO;
 import Senac.TCS.model.entity.Setor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -44,6 +45,12 @@ public class SetorController {
 	public List<Setor> listarTodos() {
 		List<Setor> setores = service.listarTodos();
 		return setores;
+	}
+
+	@GetMapping("/porUsuario/{idUsuario}")
+	public ResponseEntity<List<SetorInfoDTO>> buscarInfoSetoresPorUsuario(@PathVariable Long idUsuario){
+		List<SetorInfoDTO> setores = service.bucarInforSetoresPorUsuario(idUsuario);
+		return ResponseEntity.ok(setores);
 	}
 
 	

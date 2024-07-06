@@ -1,5 +1,6 @@
 package Senac.TCS.model.repository;
 
+import Senac.TCS.model.dto.SetorInfoDTO;
 import Senac.TCS.model.entity.Mensagem;
 import Senac.TCS.model.entity.Setor;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,4 +18,10 @@ public interface SetorRepository extends JpaRepository<Setor, Long>, JpaSpecific
             " s.id = us.id_setor " +
             " where us.id_usuario = ?1 ", nativeQuery = true)
     public List<Setor> obterSetoresDeUsuario(Long idUsuario);
+
+    @Query(value= " select s.*, us.administrador from setor s " +
+            " join usuario_setor us on " +
+            " us.id_setor = s.id " +
+            " where us.id_usuario = ?1 ; ", nativeQuery = true)
+    public List<SetorInfoDTO> obterInfoSetoresDeUsuario(Long idUsuario);
 }

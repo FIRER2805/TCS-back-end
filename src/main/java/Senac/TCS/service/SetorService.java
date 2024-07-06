@@ -3,6 +3,7 @@ package Senac.TCS.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import Senac.TCS.model.dto.SetorInfoDTO;
 import Senac.TCS.model.entity.Setor;
 import Senac.TCS.model.repository.SetorRepository;
 import Senac.TCS.model.repository.UsuarioRepository;
@@ -60,6 +61,10 @@ public class SetorService {
 		} else {
 			throw new IllegalArgumentException("Não é possível inserir um setor com um ID já definido.");
 		}
+	}
+
+	public List<SetorInfoDTO> bucarInforSetoresPorUsuario(Long idUsuario){
+		return this.setorRepository.obterInfoSetoresDeUsuario(idUsuario);
 	}
 
 	@Transactional
