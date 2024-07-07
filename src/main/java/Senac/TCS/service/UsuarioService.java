@@ -51,6 +51,8 @@ public class UsuarioService {
     }
 
     public Usuario atualizar(Usuario usuario){
+		String hashSenha = new BCryptPasswordEncoder().encode(usuario.getSenha());
+		usuario.setSenha(hashSenha);
         return usuarioRepository.save(usuario);
     }
 
@@ -84,9 +86,9 @@ public class UsuarioService {
     }
 
 	public Usuario atualizarUsuario(Usuario usuario) throws CampoInvalidoException {
-
 		validarAtributosDeUsuario(usuario);
-
+		String hashSenha = new BCryptPasswordEncoder().encode(usuario.getSenha());
+		usuario.setSenha(hashSenha);
 		return usuarioRepository.save(usuario);
 	}
 
@@ -103,7 +105,7 @@ public class UsuarioService {
 			mensagem += "\nSenha invalido";
 		}
 
-		if (mensagem.isBlank()) {
+		if (!mensagem.isBlank()) {
 			throw new CampoInvalidoException(mensagem);
 		}
 
