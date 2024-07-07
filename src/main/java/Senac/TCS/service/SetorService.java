@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import Senac.TCS.model.dto.SetorInfoDTO;
+import Senac.TCS.model.entity.Mensagem;
 import Senac.TCS.model.entity.Setor;
+import Senac.TCS.model.repository.MensagemRepository;
 import Senac.TCS.model.repository.SetorRepository;
 import Senac.TCS.model.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,8 @@ public class SetorService {
 	private SetorRepository setorRepository;
 	@Autowired
 	private UsuarioRepository usuarioRepository;
+	@Autowired
+	MensagemRepository mensagemRepository;
 	
 	public List<Setor> consultarComFiltros(SetorSeletor seletor) {
 		List<Setor> setores = listarTodos();
@@ -73,6 +77,11 @@ public class SetorService {
         if (novoSetor.getIdSetor() == null) {
             Setor setorSalvo = setorRepository.save(novoSetor);
             usuarioRepository.inserirUsuarioNoSetor(idUsuario, setorSalvo.getIdSetor(), true);
+			Mensagem mensagem = Mensagem.builder()
+					.idSetor(setorSalvo.getIdSetor())
+					.conteudo("Bem-vindo ao setor " + setorSalvo.getNome() + ", em que posso ajudar?")
+					.build();
+			mensagemRepository.save(mensagem);
             return setorSalvo;
         } else {
             return atualizar(novoSetor);

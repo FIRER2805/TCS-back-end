@@ -21,7 +21,7 @@ CREATE TABLE usuario_setor (
     id_setor BIGINT,
     administrador TINYINT NOT NULL DEFAULT 0,
     FOREIGN KEY (id_usuario) REFERENCES usuario(id),
-    FOREIGN KEY (id_setor) REFERENCES setor(id)
+    FOREIGN KEY (id_setor) REFERENCES setor(id) ON DELETE CASCADE
 );
 
 create table contato(
@@ -37,7 +37,7 @@ create table mensagem(
 	id bigint not null auto_increment primary key,
     conteudo varchar(255) not null,
     id_setor bigint not null,
-    foreign key(id_setor) references setor(id)
+    foreign key(id_setor) references setor(id) ON DELETE CASCADE
 );
 
 create table input(
