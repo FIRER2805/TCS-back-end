@@ -7,7 +7,7 @@ CREATE TABLE usuario (
     nome VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE,
     senha VARCHAR(255),
-    telefone CHAR(11) UNIQUE
+    telefone CHAR(13) UNIQUE
 );
 
 CREATE TABLE setor (
@@ -54,5 +54,7 @@ CREATE TABLE mensagem_historico(
 	conteudo VARCHAR(255) NOT NULL,
 	data_envio DATETIME NOT NULL,
 	id_contato BIGINT NOT NULL,
-	FOREIGN KEY (id_contato) references contato(id)
+	FOREIGN KEY (id_contato) references contato(id) on delete cascade
 );
+
+insert into usuario(nome, email, senha, telefone) values("Leonardo", "leonardo@hotmail.com","admin", "5548999998888");
