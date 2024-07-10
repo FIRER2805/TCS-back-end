@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import Senac.TCS.model.entity.Contato;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -24,4 +25,9 @@ public interface ContatoRepository extends CrudRepository<Contato, Long>{
             "    , c.numero " +
             "ORDER BY 4 desc ", nativeQuery = true)
     List<Contato> findContatoByMostRecentMessage(Long idUsuario);
+
+    List<Contato> findByNumeroLike(@Param("numero") String numero);
+
+    List<Contato> findByNomeLike(@Param("nome") String nome);
+
 }

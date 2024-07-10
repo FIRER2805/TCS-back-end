@@ -40,6 +40,21 @@ public class ContatoController {
         return contatoService.buscarContatosPorUsuario(id);
     }
 
+    @GetMapping("/nome/{nome}")
+    public List<Contato> buscarContatoPorNome(@PathVariable String nome) {
+        return contatoService.buscarContatoPorNome(nome);
+    }
+
+    @GetMapping("numero/{numero}")
+    public ResponseEntity<List<Contato>> buscarPorNumero(@PathVariable String numero) {
+        List<Contato> contatos = contatoService.obterContatosPorNumero(numero);
+        if (!contatos.isEmpty()) {
+            return ResponseEntity.ok(contatos);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @GetMapping("/{id}")
     public Optional<Contato> buscarContatosPorUsuario (@PathVariable Long id) {
         return contatoService.buscarContatosPorUsuario(id);

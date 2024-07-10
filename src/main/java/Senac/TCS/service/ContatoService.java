@@ -27,6 +27,11 @@ public class ContatoService {
 		return contatoRepository.findById(idUsuario);
 	}
 
+	public List<Contato> buscarContatoPorNome(String nome) {
+		String likePattern = "%" + nome + "%";
+		return contatoRepository.findByNomeLike(likePattern);
+	}
+
 	public Optional<Contato> buscarContatoPorId(Long id) {
 		return contatoRepository.findById(id);
 	}
@@ -46,6 +51,11 @@ public class ContatoService {
 
 	public List<Contato> contatoMensagemRec(Long idUsuario) {
 		return (List<Contato>) contatoRepository.findContatoByMostRecentMessage(idUsuario);
+	}
+
+	public List<Contato> obterContatosPorNumero(String numero) {
+		String likePattern = "%" + numero + "%";
+		return contatoRepository.findByNumeroLike(likePattern);
 	}
 
 	public List<Contato> listarContatos() {
